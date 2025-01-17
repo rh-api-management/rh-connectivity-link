@@ -21,6 +21,8 @@ ENV LDFLAGS="-X ${VERSION_PKG}.buildDate="
 ENV BINARY_NAME="manager"
 
 WORKDIR /workspace
+RUN ls -al
+RUN pwd
 # Copy the Go Modules manifests
 COPY rh-connectivity-link-operator/kuadrant-operator/go.mod go.mod
 COPY rh-connectivity-link-operator/kuadrant-operator/go.sum go.sum
