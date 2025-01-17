@@ -1,0 +1,4 @@
+[submodule "rh-connectivity-link-operator/kuadrant-operator"]
+	path = rh-connectivity-link-operator/kuadrant-operator
+	url = https://github.com/kuadrant/kuadrant-operator
+	branch = main
