@@ -2,3 +2,6 @@
 	path = rh-connectivity-link-operator/kuadrant-operator
 	url = https://github.com/kuadrant/kuadrant-operator
 	branch = main
+[submodule "drift-detection"]
+	path = drift-detection
+	url = https://github.com/arewm/drift-detection.git
