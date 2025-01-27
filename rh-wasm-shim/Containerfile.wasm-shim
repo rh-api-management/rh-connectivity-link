@@ -1,0 +1,43 @@
+# ------------------------------------------------------------------------------
+# Build Stage
+# ------------------------------------------------------------------------------
+
+    FROM registry.redhat.io/ubi9:9.5 as wasm-shim-build
+
+    ARG GITHUB_SHA
+    ENV GITHUB_SHA=${GITHUB_SHA:-unknown}
+    
+    ARG RUSTC_VERSION=1.80.0
+    RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold openssl-devel perl protobuf-compiler protobuf-devel git rust-std-static-${TARGET}" \
+    && dnf install --nodocs --assumeyes $PKGS \
+    && rpm --verify --nogroup --nouser $PKGS \
+    && yum -y clean all
+    
+    WORKDIR /usr/src/wasm-shim
+    
+    COPY ./wasm-shim/Cargo.lock ./Cargo.lock
+    COPY ./wasm-shim/Cargo.toml ./Cargo.toml
+    
+    COPY ./wasm-shim/src src
+    COPY ./wasm-shim/build.rs build.rs
+    COPY ./wasm-shim/vendor-protobufs vendor-protobufs
+    
+    RUN source $HOME/.cargo/env \
+        && cargo build --target=wasm32-unknown-unknown --release
+    
+    # ------------------------------------------------------------------------------
+    # Run Stage
+    # ------------------------------------------------------------------------------
+    
+    FROM scratch
+    
+    LABEL version="0.8.1" \
+              com.redhat.component="wasm-shim-container" \
+              name="rhcl-1/wasm-shim-rhel9" \
+              summary="Wasm-shim is a generic rate-limiter written in Rust." \
+              description="Wasm-shim is a generic rate-limiter written in Rust. It can be used as a library, or as a service. The service exposes HTTP endpoints to apply and observe limits. Wasm-shim can be used with Envoy because it also exposes a grpc service, on a different port, that implements the Envoy Rate Limit protocol (v3)." \
+              io.k8s.display-name="Wasm-shim Rate Limiting" \
+              io.openshift.tags="rate limiting, envoy, api" \
+              maintainer="eastizle@redhat.com"
+
+    COPY --from=wasm-shim-build /usr/src/wasm-shim/target/wasm32-unknown-unknown/release/wasm_shim.wasm /plugin.wasm

@@ -2,3 +2,7 @@
 	path = rh-connectivity-link-operator/kuadrant-operator
 	url = https://github.com/kuadrant/kuadrant-operator
 	branch = main
+[submodule "rh-wasm-shim/wasm-shim"]
+	path = rh-wasm-shim/wasm-shim
+	url = https://github.com/Kuadrant/wasm-shim.git
+	branch = main
