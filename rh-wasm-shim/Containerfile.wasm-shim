@@ -23,8 +23,7 @@
     COPY ./wasm-shim/build.rs build.rs
     COPY ./wasm-shim/vendor-protobufs vendor-protobufs
     
-    RUN source $HOME/.cargo/env \
-        && cargo build --target=wasm32-unknown-unknown --release
+    RUN cargo build --target=wasm32-unknown-unknown --release
     
     # ------------------------------------------------------------------------------
     # Run Stage
