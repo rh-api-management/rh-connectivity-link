@@ -8,6 +8,7 @@
     ENV GITHUB_SHA=${GITHUB_SHA:-unknown}
     
     ARG RUSTC_VERSION=1.80.0
+    ARG TARGET=wasm32-unknown-unknown
     RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold openssl-devel perl protobuf-compiler protobuf-devel git rust-std-static-${TARGET}" \
     && dnf install --nodocs --assumeyes $PKGS \
     && rpm --verify --nogroup --nouser $PKGS \
