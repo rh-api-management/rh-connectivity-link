@@ -9,7 +9,8 @@
     
     ARG RUSTC_VERSION=1.80.0
     ARG TARGET=wasm32-unknown-unknown
-    RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-c openssl-devel perl git rust-std-static-${TARGET}" \
+    RUN subscription-manager refresh
+    RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git rust-std-static-${TARGET}" \
     && dnf install --nodocs --assumeyes $PKGS \
     && rpm --verify --nogroup --nouser $PKGS \
     && yum -y clean all
