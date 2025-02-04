@@ -13,7 +13,7 @@
     && rpm --verify --nogroup --nouser $PKGS \
     && yum -y clean all
     
-    WORKDIR /usr/src/limitador
+    WORKDIR /var/workdir/source/limitador
 
     ARG GITHUB_SHA
     ARG CARGO_ARGS
@@ -61,8 +61,8 @@
     RUN useradd -u 1000 -s /bin/sh -m -d /home/limitador limitador
     WORKDIR /home/limitador/bin/
     ENV PATH="/home/limitador/bin:${PATH}"
-    COPY --from=limitador-build /usr/src/limtador/limitador-server/examples/limits.yaml ../
-    COPY --from=limitador-build /usr/src/limtador/limitador/app/target/release/limitador-server ./limitador-server
+    COPY --from=limitador-build /var/workdir/source/limitador/limitador-server/examples/limits.yaml ../
+    COPY --from=limitador-build /var/workdir/source/limitador/limitador/app/target/release/limitador-server ./limitador-server
     RUN chown -R limitador:root /home/limitador \
         && chmod -R 750 /home/limitador
     USER limitador
