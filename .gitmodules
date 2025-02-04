@@ -6,3 +6,7 @@
 	path = rh-wasm-shim/wasm-shim
 	url = https://github.com/Kuadrant/wasm-shim.git
 	branch = main
+[submodule "rh-limitador/limitador"]
+	path = rh-limitador/limitador
+	url = https://github.com/Kuadrant/limitador
+	branch = main

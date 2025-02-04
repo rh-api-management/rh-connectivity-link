@@ -1,0 +1,66 @@
+    # ------------------------------------------------------------------------------
+    # Build Stage
+    # ------------------------------------------------------------------------------
+
+    # Use bullseye as build image instead of Bookworm as ubi9 does not not have GLIBCXX_3.4.30
+    # https://access.redhat.com/solutions/6969351
+
+    FROM registry.redhat.io/ubi9/ubi:latest as limitador-build
+
+    RUN apt update && apt upgrade -y \
+        && apt install -y protobuf-compiler clang
+
+    WORKDIR /usr/src/limitador
+
+    ARG GITHUB_SHA
+    ARG CARGO_ARGS
+    ENV GITHUB_SHA=${GITHUB_SHA:-unknown}
+    ENV RUSTFLAGS="-C target-feature=-crt-static"
+
+    # We set the env here just to make sure that the build is invalidated if the args change
+    ENV CARGO_ARGS=${CARGO_ARGS}
+
+    # The following allows us to cache the Cargo dependency downloads with image layers
+    COPY Cargo.toml Cargo.lock ./
+    COPY limitador/Cargo.toml ./limitador/
+    COPY limitador-server/Cargo.toml ./limitador-server/
+    RUN mkdir -p limitador-server/src && echo 'fn main() {}' > limitador-server/src/main.rs
+    RUN cargo build --release ${CARGO_ARGS}
+
+    COPY ./limitador ./limitador
+    COPY ./limitador-server ./limitador-server
+
+    RUN cargo build --release ${CARGO_ARGS}
+    
+    # ------------------------------------------------------------------------------
+    # Run Stage
+    # ------------------------------------------------------------------------------
+    
+    FROM registry.redhat.io/ubi9/ubi:latest
+    # Labels consumed by Red Hat build service
+    # Please keep the version label first as it is looked up by the Makefile - also, it is meant to be the image tag.
+    LABEL version="1.6.0" \
+            com.redhat.component="limitador-container" \
+            name="rhcl-1/limitador-rhel9" \
+            summary="Limitador is a generic rate-limiter written in Rust." \
+            description="Limitador is a generic rate-limiter written in Rust. It can be used as a library, or as a service. The service exposes HTTP endpoints to apply and observe limits. Limitador can be used with Envoy because it also exposes a grpc service, on a different port, that implements the Envoy Rate Limit protocol (v3)." \
+            io.k8s.display-name="Limitador Rate Limiting" \
+            io.openshift.tags="rate limiting, envoy, api" \
+            maintainer="asnaps@redhat.com" \
+            upstream_repo="${CI_LIMITADOR_UPSTREAM_URL}" \
+            upstream_ref="${CI_LIMITADOR_UPSTREAM_COMMIT}" \
+            org.opencontainers.image.revision="${CI_LIMITADOR_UPSTREAM_COMMIT}"
+    # shadow-utils is required for `useradd`
+    RUN PKGS="libgcc shadow-utils" \
+        && dnf --assumeyes install --nodocs $PKGS \
+        && rpm --verify --nogroup --nouser $PKGS \
+        && dnf --assumeyes clean all
+    RUN useradd -u 1000 -s /bin/sh -m -d /home/limitador limitador
+    WORKDIR /home/limitador/bin/
+    ENV PATH="/home/limitador/bin:${PATH}"
+    COPY --from=limitador-build $REMOTE_SOURCES_DIR/limitador/app/limitador-server/examples/limits.yaml ../
+    COPY --from=limitador-build $REMOTE_SOURCES_DIR/limitador/app/target/release/limitador-server ./limitador-server
+    RUN chown -R limitador:root /home/limitador \
+        && chmod -R 750 /home/limitador
+    USER limitador
+    CMD ["limitador-server"]
