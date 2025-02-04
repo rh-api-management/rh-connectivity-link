@@ -8,7 +8,7 @@
     FROM registry.redhat.io/ubi9/ubi:latest as limitador-build
 
     RUN subscription-manager refresh
-    RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git \
+    RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git"  \
     && dnf install --nodocs --assumeyes $PKGS \
     && rpm --verify --nogroup --nouser $PKGS \
     && yum -y clean all
@@ -61,8 +61,8 @@
     RUN useradd -u 1000 -s /bin/sh -m -d /home/limitador limitador
     WORKDIR /home/limitador/bin/
     ENV PATH="/home/limitador/bin:${PATH}"
-    COPY --from=limitador-build $REMOTE_SOURCES_DIR/limitador/app/limitador-server/examples/limits.yaml ../
-    COPY --from=limitador-build $REMOTE_SOURCES_DIR/limitador/app/target/release/limitador-server ./limitador-server
+    COPY --from=limitador-build /usr/src/limtador/limitador-server/examples/limits.yaml ../
+    COPY --from=limitador-build /usr/src/limtador/limitador/app/target/release/limitador-server ./limitador-server
     RUN chown -R limitador:root /home/limitador \
         && chmod -R 750 /home/limitador
     USER limitador
