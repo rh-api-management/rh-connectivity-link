@@ -30,8 +30,8 @@
     RUN mkdir -p limitador-server/src && echo 'fn main() {}' > limitador-server/src/main.rs
     RUN cargo build --release ${CARGO_ARGS}
 
-    COPY ./limitador ./limitador
-    COPY ./limitador-server ./limitador-server
+    COPY limitador/limitador ./limitador
+    COPY limitador/limitador-server ./limitador-server
 
     RUN cargo build --release ${CARGO_ARGS}
     
@@ -49,10 +49,7 @@
             description="Limitador is a generic rate-limiter written in Rust. It can be used as a library, or as a service. The service exposes HTTP endpoints to apply and observe limits. Limitador can be used with Envoy because it also exposes a grpc service, on a different port, that implements the Envoy Rate Limit protocol (v3)." \
             io.k8s.display-name="Limitador Rate Limiting" \
             io.openshift.tags="rate limiting, envoy, api" \
-            maintainer="asnaps@redhat.com" \
-            upstream_repo="${CI_LIMITADOR_UPSTREAM_URL}" \
-            upstream_ref="${CI_LIMITADOR_UPSTREAM_COMMIT}" \
-            org.opencontainers.image.revision="${CI_LIMITADOR_UPSTREAM_COMMIT}"
+            maintainer="asnaps@redhat.com"
     # shadow-utils is required for `useradd`
     RUN PKGS="libgcc shadow-utils" \
         && dnf --assumeyes install --nodocs $PKGS \
@@ -61,8 +58,8 @@
     RUN useradd -u 1000 -s /bin/sh -m -d /home/limitador limitador
     WORKDIR /home/limitador/bin/
     ENV PATH="/home/limitador/bin:${PATH}"
-    COPY --from=limitador-build /var/workdir/source/limitador/limitador-server/examples/limits.yaml ../
-    COPY --from=limitador-build /var/workdir/source/limitador/limitador/app/target/release/limitador-server ./limitador-server
+    COPY --from=limitador-build /tmp/limitador-server/examples/limits.yaml ../
+    COPY --from=limitador-build /tmp/limitador/app/target/release/limitador-server ./limitador-server
     RUN chown -R limitador:root /home/limitador \
         && chmod -R 750 /home/limitador
     USER limitador
