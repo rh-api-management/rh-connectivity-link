@@ -5,7 +5,7 @@
     # Use bullseye as build image instead of Bookworm as ubi9 does not not have GLIBCXX_3.4.30
     # https://access.redhat.com/solutions/6969351
 
-    FROM registry.redhat.io/ubi9:9.5 as limitador-build
+    FROM registry.redhat.io/ubi9/ubi:latest as limitador-build
 
     RUN subscription-manager refresh
     RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git"  \
