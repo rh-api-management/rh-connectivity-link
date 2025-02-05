@@ -13,7 +13,7 @@
     && rpm --verify --nogroup --nouser $PKGS \
     && yum -y clean all
     
-    WORKDIR /rh-limitador/limitador
+    WORKDIR /tmp
 
     ARG GITHUB_SHA
     ARG CARGO_ARGS
@@ -24,9 +24,9 @@
     ENV CARGO_ARGS=${CARGO_ARGS}
 
     # The following allows us to cache the Cargo dependency downloads with image layers
-    COPY Cargo.toml Cargo.lock ./
-    COPY limitador/Cargo.toml ./limitador/
-    COPY limitador-server/Cargo.toml ./limitador-server/
+    COPY limitador/Cargo.toml /limitador/Cargo.lock ./
+    COPY limitador/limitador/Cargo.toml ./limitador/
+    COPY limitador/limitador-server/Cargo.toml ./limitador-server/
     RUN mkdir -p limitador-server/src && echo 'fn main() {}' > limitador-server/src/main.rs
     RUN cargo build --release ${CARGO_ARGS}
 
