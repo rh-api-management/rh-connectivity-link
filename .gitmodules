@@ -14,3 +14,7 @@
 	path = rh-limitador-operator/limitador-operator
 	url = https://github.com/kuadrant/limitador-operator
 	branch = main
+[submodule "rh-authorino/authorino"]
+	path = rh-authorino/authorino
+	url = https://github.com/Kuadrant/authorino/
+	branch = main
