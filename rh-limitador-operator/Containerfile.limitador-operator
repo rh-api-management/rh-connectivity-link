@@ -6,7 +6,7 @@ COPY drift-detection/detector.sh /detector.sh
 # Check to see if we need to react to any upstream changes
 COPY drift-cache /drift-cache
 WORKDIR /tmp
-COPY limitador-operator/Dockerfile .
+COPY ./limitador-operator/Dockerfile .
 RUN /detector.sh ./Dockerfile /drift-cache/limitador-operator/Dockerfile
 
 FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS builder
@@ -22,18 +22,18 @@ ENV BINARY_NAME="manager"
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
-COPY limitador-operator/go.mod go.mod
-COPY limitador-operator/go.sum go.sum
+COPY ./limitador-operator/go.mod go.mod
+COPY ./limitador-operator/go.sum go.sum
 # cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
 RUN go mod download
 
 # Copy the go source
-COPY limitador-operator/main.go main.go
-COPY limitador-operator/apis/ apis/
-COPY limitador-operator/controllers/ controllers/
-COPY limitador-operator/pkg/ pkg/
-COPY limitador-operator/version/ version/
+COPY ./limitador-operator/main.go main.go
+COPY ./limitador-operator/apis/ apis/
+COPY ./limitador-operator/controllers/ controllers/
+COPY ./limitador-operator/pkg/ pkg/
+COPY ./limitador-operator/version/ version/
 
 
 # Build
