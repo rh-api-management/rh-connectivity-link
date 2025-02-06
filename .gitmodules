@@ -10,3 +10,7 @@
 	path = rh-limitador/limitador
 	url = https://github.com/Kuadrant/limitador
 	branch = main
+[submodule "rh-limitador-operator/limitador-operator"]
+	path = rh-limitador-operator/limitador-operator
+	url = https://github.com/kuadrant/limitador-operator
+	branch = main

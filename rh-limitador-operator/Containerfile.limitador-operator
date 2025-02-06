@@ -1,0 +1,70 @@
+# Based on ./gatekeeper-operator/Dockerfile
+# Build the manager binary
+FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS drift-detectorist
+USER 0
+COPY drift-detection/detector.sh /detector.sh
+# Check to see if we need to react to any upstream changes
+COPY drift-cache /drift-cache
+WORKDIR /tmp
+COPY limitador-operator/Dockerfile .
+RUN /detector.sh ./Dockerfile /drift-cache/limitador-operator/Dockerfile
+
+FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS builder
+
+# TODO: cleanup if not needed
+#ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
+#             -X ${VERSION_PKG}.gitCommit=59587323ce32580b4dffba0a09b1ca22109925db \
+#             -X ${VERSION_PKG}.gitTreeState=clean \
+#             -X ${VERSION_PKG}.buildDate="
+
+ENV LDFLAGS="-X ${VERSION_PKG}.buildDate="
+ENV BINARY_NAME="manager"
+
+WORKDIR /workspace
+# Copy the Go Modules manifests
+COPY limitador-operator/go.mod go.mod
+COPY limitador-operator/go.sum go.sum
+# cache deps before building and copying source so that we don't need to re-download as much
+# and so that source changes don't invalidate our downloaded layer
+RUN go mod download
+
+# Copy the go source
+COPY limitador-operator/main.go main.go
+COPY limitador-operator/apis/ apis/
+COPY limitador-operator/controllers/ controllers/
+COPY limitador-operator/pkg/ pkg/
+COPY limitador-operator/version/ version/
+
+
+# Build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDFLAGS}$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -o ${BINARY_NAME} main.go
+
+
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+
+LABEL summary="Limitador operator container image" \
+      description="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \
+            io.k8s.display-name="Limitador Operator" \
+            io.openshift.expose-services="" \
+            io.openshift.tags="rate limiting, Limitador, api" \
+      vendor="Red Hat, Inc."
+
+ENV OPERATOR_BINARY_NAME="manager" \
+  USER_UID=1001 \
+  USER_NAME=limitador-operator
+
+USER root
+
+# install operator binary
+COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
+RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
+
+# Install licenses
+ENV LICENSES_DIR="/licenses/apicast-operator/"
+RUN mkdir -p ${LICENSES_DIR}
+COPY limitador-operator/licenses.xml ${LICENSES_DIR}
+RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
+
+ENTRYPOINT ["/manager"]
+
+USER ${USER_UID}
