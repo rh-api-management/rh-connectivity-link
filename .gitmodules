@@ -17,4 +17,4 @@
 [submodule "rh-authorino/authorino"]
 	path = rh-authorino/authorino
 	url = https://github.com/Kuadrant/authorino/
-	branch=main
+	branch = main
