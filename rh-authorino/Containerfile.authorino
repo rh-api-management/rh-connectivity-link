@@ -3,8 +3,8 @@
 
 FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS builder
 USER root
-WORKDIR /usr/bin/authorino
-COPY ./ ./
+WORKDIR /usr/bin/
+COPY authorino /usr/bin/
 ARG version
 ENV version=${version:-unknown}
 ARG git_sha
