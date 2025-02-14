@@ -30,7 +30,7 @@ RUN go mod download
 
 # Copy the go source
 COPY ./limitador-operator/main.go main.go
-COPY ./limitador-operator/apis/ .
+COPY ./limitador-operator/api/ .
 COPY ./limitador-operator/controllers/ .
 COPY ./limitador-operator/pkg/ .
 COPY ./limitador-operator/version/ .
