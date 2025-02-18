@@ -1,6 +1,6 @@
 # Based on ./gatekeeper-operator/Dockerfile
 # Build the manager binary
-FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS drift-detectorist
+FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS drift-detectorist
 USER 0
 COPY drift-detection/detector.sh /detector.sh
 # Check to see if we need to react to any upstream changes
@@ -9,7 +9,7 @@ WORKDIR /tmp
 COPY rh-connectivity-link-operator/kuadrant-operator/Dockerfile .
 RUN /detector.sh ./Dockerfile /drift-cache/kuadrant-operator/Dockerfile
 
-FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS builder
+FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS builder
 
 # TODO: cleanup if not needed
 #ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
@@ -22,18 +22,17 @@ ENV BINARY_NAME="manager"
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
-COPY rh-connectivity-link-operator/kuadrant-operator/go.mod go.mod
-COPY rh-connectivity-link-operator/kuadrant-operator/go.sum go.sum
+COPY kuadrant-operator/go.mod go.mod
+COPY kuadrant-operator/go.sum go.sum
 # cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
 RUN go mod download
 
 # Copy the go source
-COPY rh-connectivity-link-operator/kuadrant-operator/main.go main.go
-COPY rh-connectivity-link-operator/kuadrant-operator/apis/ apis/
-COPY rh-connectivity-link-operator/kuadrant-operator/controllers/ controllers/
-COPY rh-connectivity-link-operator/kuadrant-operator/pkg/ pkg/
-COPY rh-connectivity-link-operator/kuadrant-operator/version/ version/
+COPY kuadrant-operator/main.go main.go
+COPY kuadrant-operator/api/ api/
+COPY kuadrant-operator/controllers/ controllers/
+COPY kuadrant-operator/pkg/ pkg/
 
 
 # Build
@@ -59,11 +58,11 @@ USER root
 COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
 RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
 
-# Install licenses
-ENV LICENSES_DIR="/licenses/apicast-operator/"
-RUN mkdir -p ${LICENSES_DIR}
-COPY rh-connectivity-link-operator/kuadrant-operator/licenses.xml ${LICENSES_DIR}
-RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
+# # TODO: Install licenses
+# ENV LICENSES_DIR="/licenses/apicast-operator/"
+# RUN mkdir -p ${LICENSES_DIR}
+# COPY rh-connectivity-link-operator/kuadrant-operator/licenses.xml ${LICENSES_DIR}
+# RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
 
 ENTRYPOINT ["/manager"]
 
