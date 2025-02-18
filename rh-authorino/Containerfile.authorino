@@ -18,11 +18,11 @@ RUN CGO_ENABLED=0 GO111MODULE=on go build -a -ldflags "-X main.version=${version
 
 FROM registry.access.redhat.com/ubi9-minimal:latest
 
-# shadow-utils is required for `useradd`
-RUN PKGS="shadow-utils" \
-    && microdnf --assumeyes install --nodocs $PKGS \
-    && rpm --verify --nogroup --nouser $PKGS \
-    && microdnf -y clean all
+# shadow-utils is required for `useradd, but is already included in the ubi9 go-toolset image, so commenting out for now`
+# RUN PKGS="shadow-utils" \
+#     && microdnf --assumeyes install --nodocs $PKGS \
+#     && rpm --verify --nogroup --nouser $PKGS \
+#     && microdnf -y clean all
 RUN useradd -u 1000 -s /bin/sh -m -d /home/authorino authorino
 
 WORKDIR /home/authorino/bin

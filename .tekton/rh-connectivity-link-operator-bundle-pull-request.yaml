@@ -31,6 +31,8 @@ spec:
     value: Containerfile.connectivity-link-operator-bundle
   - name: path-context
     value: rh-connectivity-link-operator
+  - name: prefetch-input
+    value: '{"type": "gomod", "path": "rh-connectivity-link-operator/kuadrant-operator"}'
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.
@@ -80,7 +82,7 @@ spec:
       description: Skip checks against built image
       name: skip-checks
       type: string
-    - default: "false"
+    - default: "true"
       description: Execute the build with network isolation
       name: hermetic
       type: string
