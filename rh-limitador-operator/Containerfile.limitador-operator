@@ -30,10 +30,9 @@ RUN go mod download
 
 # Copy the go source
 COPY limitador-operator/main.go main.go
-COPY limitador-operator/apis/ apis/
+COPY limitador-operator/api/ api/
 COPY limitador-operator/controllers/ controllers/
 COPY limitador-operator/pkg/ pkg/
-COPY limitador-operator/version/ version/
 
 
 # Build
@@ -59,11 +58,11 @@ USER root
 COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
 RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
 
-# Install licenses
-ENV LICENSES_DIR="/licenses/apicast-operator/"
-RUN mkdir -p ${LICENSES_DIR}
-COPY limitador-operator/licenses.xml ${LICENSES_DIR}
-RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
+# TODO: Install licenses
+# ENV LICENSES_DIR="/licenses/apicast-operator/"
+# RUN mkdir -p ${LICENSES_DIR}
+# COPY limitador-operator/LICENSE ${LICENSES_DIR}
+# RUN chown ${USER_UID} ${LICENSES_DIR}/licenses
 
 ENTRYPOINT ["/manager"]
 
