@@ -1,0 +1,69 @@
+# Based on ./gatekeeper-operator/Dockerfile
+# Build the manager binary
+FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS drift-detectorist
+USER 0
+COPY drift-detection/detector.sh /detector.sh
+# Check to see if we need to react to any upstream changes
+COPY drift-cache /drift-cache
+WORKDIR /tmp
+COPY rh-connectivity-link-operator/kuadrant-operator/Dockerfile .
+RUN /detector.sh ./Dockerfile /drift-cache/kuadrant-operator/Dockerfile
+
+FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS builder
+
+# TODO: cleanup if not needed
+#ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
+#             -X ${VERSION_PKG}.gitCommit=59587323ce32580b4dffba0a09b1ca22109925db \
+#             -X ${VERSION_PKG}.gitTreeState=clean \
+#             -X ${VERSION_PKG}.buildDate="
+
+ENV LDFLAGS="-X ${VERSION_PKG}.buildDate="
+ENV BINARY_NAME="manager"
+
+WORKDIR /workspace
+# Copy the Go Modules manifests
+COPY kuadrant-operator/go.mod go.mod
+COPY kuadrant-operator/go.sum go.sum
+# cache deps before building and copying source so that we don't need to re-download as much
+# and so that source changes don't invalidate our downloaded layer
+RUN go mod download
+
+# Copy the go source
+COPY kuadrant-operator/main.go main.go
+COPY kuadrant-operator/api/ api/
+COPY kuadrant-operator/controllers/ controllers/
+COPY kuadrant-operator/pkg/ pkg/
+
+
+# Build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDFLAGS}$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -o ${BINARY_NAME} main.go
+
+
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+
+LABEL summary="APIcast operator container image" \
+      description="APIcast Operator provides an easy way to install a 3scale APIcast self-managed solution, providing configurability options at the time of installation." \
+            io.k8s.display-name="APIcast Operator" \
+            io.openshift.expose-services="" \
+            io.openshift.tags="3scale, apicast, api, gateway, openresty, api-gateway" \
+      vendor="Red Hat, Inc."
+
+ENV OPERATOR_BINARY_NAME="manager" \
+  USER_UID=1001 \
+  USER_NAME=connectivity-link-operator
+
+USER root
+
+# install operator binary
+COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
+RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
+
+# # TODO: Install licenses
+# ENV LICENSES_DIR="/licenses/apicast-operator/"
+# RUN mkdir -p ${LICENSES_DIR}
+# COPY rh-connectivity-link-operator/kuadrant-operator/licenses.xml ${LICENSES_DIR}
+# RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
+
+ENTRYPOINT ["/manager"]
+
+USER ${USER_UID}
