@@ -65,10 +65,10 @@ COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
 RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
 
 # TODO: Install licenses
-# ENV LICENSES_DIR="/licenses/apicast-operator/"
-# RUN mkdir -p ${LICENSES_DIR}
-# COPY authorino-operator/LICENSE ${LICENSES_DIR}
-# RUN chown ${USER_UID} ${LICENSES_DIR}/licenses
+ENV LICENSES_DIR="/licenses/apicast-operator/"
+RUN mkdir -p ${LICENSES_DIR}
+COPY rh-connectivity-link-operator/kuadrant-operator/licenses.xml ${LICENSES_DIR}
+RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
 
 ENTRYPOINT ["/manager"]
 
