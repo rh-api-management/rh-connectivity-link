@@ -35,7 +35,12 @@ COPY authorino-operator/api/ api/
 COPY authorino-operator/controllers/ controllers/
 COPY authorino-operator/pkg/ pkg/
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDFLAGS}$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -o ${BINARY_NAME} main.go
+ARG OPERATOR_VERSION=latest
+ARG DEFAULT_AUTHORINO_IMAGE=quay.io/kuadrant/authorino:latest
+ARG GIT_SHA=unknown
+ARG DIRTY=unknown
+
+RUN CGO_ENABLED=0 GO111MODULE=on go build -a -ldflags "-X main.version=${OPERATOR_VERSION} -X main.gitSHA=${GIT_SHA} -X main.dirty=${DIRTY} -X github.com/kuadrant/authorino-operator/controllers.DefaultAuthorinoImage=${DEFAULT_AUTHORINO_IMAGE}" -o manager main.go
 
 ################################################################
 
