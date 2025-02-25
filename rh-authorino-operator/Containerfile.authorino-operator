@@ -1,5 +1,6 @@
 # Based on ./gatekeeper-operator/Dockerfile
 # Build the manager binary
+
 FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS drift-detectorist
 USER 0
 COPY drift-detection/detector.sh /detector.sh
@@ -34,9 +35,9 @@ COPY authorino-operator/api/ api/
 COPY authorino-operator/controllers/ controllers/
 COPY authorino-operator/pkg/ pkg/
 
-
-# Build
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDFLAGS}$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -o ${BINARY_NAME} main.go
+
+################################################################
 
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
