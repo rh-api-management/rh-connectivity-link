@@ -52,6 +52,7 @@ LABEL summary="authorino operator container image" \
             io.openshift.tags="rate limiting, authorino, api" \
       vendor="Red Hat, Inc."
 
+      
 ENV OPERATOR_BINARY_NAME="manager" \
   USER_UID=1001 \
   USER_NAME=authorino-operator
