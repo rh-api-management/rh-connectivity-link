@@ -27,7 +27,6 @@ COPY authorino-operator/go.mod go.mod
 COPY authorino-operator/go.sum go.sum
 # cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
-RUN go mod init
 RUN go mod tidy && download
 # RUN go env GOWORK
 
@@ -64,10 +63,10 @@ COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
 RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
 
 # TODO: Install licenses
-ENV LICENSES_DIR="/licenses/apicast-operator/"
-RUN mkdir -p ${LICENSES_DIR}
-COPY rh-authorino-operator/authorino-operator/licenses.xml ${LICENSES_DIR}
-RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
+#ENV LICENSES_DIR="/licenses/apicast-operator/"
+#RUN mkdir -p ${LICENSES_DIR}
+#COPY rh-authorino-operator/authorino-operator/licenses.xml ${LICENSES_DIR}
+#RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
 
 ENTRYPOINT ["/manager"]
 
