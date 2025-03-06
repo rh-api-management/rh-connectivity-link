@@ -12,7 +12,7 @@ COPY drift-detection/detector.sh /detector.sh
 # Check to see if we need to react to any upstream changes
 COPY drift-cache /drift-cache
 WORKDIR /tmp
-COPY authorino-operator/Dockerfile .
+COPY ./authorino-operator/Dockerfile .
 RUN /detector.sh ./Dockerfile /drift-cache/authorino-operator/Dockerfile
 
 # Using 1.22 version (not 1.22.9)
@@ -33,13 +33,13 @@ COPY authorino-operator/go.mod go.mod
 COPY authorino-operator/go.sum go.sum
 # cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
-RUN go mod tidy && go mod download
+RUN go mod download
 
 # Copy the go source
-COPY authorino-operator/main.go main.go
-COPY authorino-operator/api/ api/
-COPY authorino-operator/controllers/ controllers/
-COPY authorino-operator/pkg/ pkg/
+COPY ./authorino-operator/main.go main.go
+COPY ./authorino-operator/api/ api/
+COPY ./authorino-operator/controllers/ controllers/
+COPY ./authorino-operator/pkg/ pkg/
 
 
 # Build
