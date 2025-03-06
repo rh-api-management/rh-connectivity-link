@@ -1,5 +1,8 @@
 # Based on ./gatekeeper-operator/Dockerfile
 # Build the manager binary
+
+# Red Hat Authorino Operator
+
 FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS drift-detectorist
 USER 0
 COPY drift-detection/detector.sh /detector.sh
