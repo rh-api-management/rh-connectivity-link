@@ -1,15 +1,22 @@
 # Based on ./gatekeeper-operator/Dockerfile
 # Build the manager binary
-FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS drift-detectorist
+
+################################
+# Red Hat Authorino Operator
+################################
+
+# Using 1.22 version (not 1.22.9)
+FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS drift-detectorist
 USER 0
 COPY drift-detection/detector.sh /detector.sh
 # Check to see if we need to react to any upstream changes
 COPY drift-cache /drift-cache
 WORKDIR /tmp
-COPY authorino-operator/Dockerfile .
+COPY ./authorino-operator/Dockerfile .
 RUN /detector.sh ./Dockerfile /drift-cache/authorino-operator/Dockerfile
 
-FROM registry.access.redhat.com/ubi9/go-toolset:1.21 AS builder
+# Using 1.22 version (not 1.22.9)
+FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS builder
 
 # TODO: cleanup if not needed
 #ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
@@ -29,10 +36,10 @@ COPY authorino-operator/go.sum go.sum
 RUN go mod download
 
 # Copy the go source
-COPY authorino-operator/main.go main.go
-COPY authorino-operator/api/ api/
-COPY authorino-operator/controllers/ controllers/
-COPY authorino-operator/pkg/ pkg/
+COPY ./authorino-operator/main.go main.go
+COPY ./authorino-operator/api/ api/
+COPY ./authorino-operator/controllers/ controllers/
+COPY ./authorino-operator/pkg/ pkg/
 
 
 # Build
