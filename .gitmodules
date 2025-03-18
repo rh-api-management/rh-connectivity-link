@@ -18,11 +18,3 @@
 	path = rh-authorino/authorino
 	url = https://github.com/Kuadrant/authorino/
 	branch = main
-[submodule "rh-dns-operator/dns-operator"]
-	path = rh-dns-operator/dns-operator
-	url = https://github.com/Kuadrant/dns-operator/
-	branch = main
-[submodule "rh-authorino-operator/authorino-operator"]
-	path = rh-authorino-operator/authorino-operator
-	url = https://github.com/Kuadrant/authorino-operator
-	branch = main
