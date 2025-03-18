@@ -1,0 +1,10 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["github>konflux-ci/mintmaker//config/renovate/renovate.json"],
+    "packageRules": [
+        {
+        "matchUpdateTypes": ["digest"],
+        "automerge": true
+        }
+    ]
+}
