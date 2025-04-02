@@ -1,0 +1,17 @@
+packages:
+  - rust-toolset
+  - llvm-toolset
+  - gcc-c++
+  - gcc-toolset-12-binutils-gold
+  - protobuf-devel
+  - protobuf-compiler
+  - openssl-devel
+  - perl
+  - git
+  - shadow-utils
+  - libgcc
+contentOrigin:
+  repofiles:
+  - "./ubi.repo"
+  - "./redhat.repo"
+arches: [x86_64]
