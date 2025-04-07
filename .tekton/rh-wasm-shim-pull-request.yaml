@@ -31,6 +31,8 @@ spec:
     value: Containerfile.wasm-shim
   - name: path-context
     value: rh-wasm-shim
+  - name: prefetch-input
+    value: '[{"type": "cargo", "path": "rh-wasm-shim/wasm-shim"},{"type": "rpm", "path": "rh-wasm-shim"}]'
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.
@@ -80,7 +82,7 @@ spec:
       description: Skip checks against built image
       name: skip-checks
       type: string
-    - default: "false"
+    - default: "true"
       description: Execute the build with network isolation
       name: hermetic
       type: string
@@ -178,6 +180,8 @@ spec:
         value: $(params.output-image).prefetch
       - name: ociArtifactExpiresAfter
         value: $(params.image-expires-after)
+      - name: dev-package-managers
+        value: "true"
       runAfter:
       - clone-repository
       taskRef:

@@ -9,7 +9,6 @@
     
     ARG RUSTC_VERSION=1.80.0
     ARG TARGET=wasm32-unknown-unknown
-    RUN subscription-manager refresh
     RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git rust-std-static-${TARGET}" \
     && dnf install --nodocs --assumeyes $PKGS \
     && rpm --verify --nogroup --nouser $PKGS \
@@ -19,12 +18,13 @@
     
     COPY ./wasm-shim/Cargo.lock ./Cargo.lock
     COPY ./wasm-shim/Cargo.toml ./Cargo.toml
+    COPY wasm-shim/.cargo/config.toml ./.cargo/config.toml
     
     COPY ./wasm-shim/src src
     COPY ./wasm-shim/build.rs build.rs
     COPY ./wasm-shim/vendor-protobufs vendor-protobufs
     
-    RUN cargo build --target=wasm32-unknown-unknown --release
+    RUN cargo build --target=wasm32-unknown-unknown --release --offline
     
     # ------------------------------------------------------------------------------
     # Run Stage
