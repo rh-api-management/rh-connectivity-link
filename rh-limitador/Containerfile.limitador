@@ -7,7 +7,6 @@
 
     FROM registry.redhat.io/ubi9/ubi:latest as limitador-build
 
-    RUN subscription-manager refresh
     RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git"  \
     && dnf install --nodocs --assumeyes $PKGS \
     && rpm --verify --nogroup --nouser $PKGS \
@@ -27,13 +26,16 @@
     COPY limitador/Cargo.toml /limitador/Cargo.lock ./
     COPY limitador/limitador/Cargo.toml ./limitador/
     COPY limitador/limitador-server/Cargo.toml ./limitador-server/
+    COPY limitador/.cargo/config.toml ./.cargo/config.toml
     RUN mkdir -p limitador-server/src && echo 'fn main() {}' > limitador-server/src/main.rs
-    RUN cargo build --release ${CARGO_ARGS}
+    RUN cargo build --release ${CARGO_ARGS} --offline
+
 
     COPY limitador/limitador ./limitador
     COPY limitador/limitador-server ./limitador-server
 
-    RUN cargo build --release ${CARGO_ARGS}
+    RUN cargo build --release ${CARGO_ARGS} --offline
+
     
     # ------------------------------------------------------------------------------
     # Run Stage
