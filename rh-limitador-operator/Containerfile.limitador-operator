@@ -43,7 +43,10 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 LABEL summary="Limitador operator container image" \
       description="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \
+            com.redhat.component="limitador-operator" \
+            name="limitador-operator" \
             io.k8s.display-name="Limitador Operator" \
+            io.k8s.description="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \
             io.openshift.expose-services="" \
             io.openshift.tags="rate limiting, Limitador, api" \
       vendor="Red Hat, Inc."
