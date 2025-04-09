@@ -1,8 +1,6 @@
 contentOrigin:
   repofiles:
     - ./ubi.repo
-context:
-  containerfile: Containerfile.dns-operator-bundle
 packages:
   - jq
   - python3
