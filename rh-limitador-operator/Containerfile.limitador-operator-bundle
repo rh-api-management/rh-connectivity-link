@@ -41,6 +41,7 @@ LABEL com.redhat.component="limitador-operator-bundle" \
       url="registry.redhat.io/rhcl-1/limitador-operator-bundle" \
       summary="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \
       description="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \
+      distribution-scope="public" \
       io.k8s.description="" \
       io.k8s.display-name="Limitador Operator metadata" \
       io.openshift.expose-services="" \
