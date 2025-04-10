@@ -41,14 +41,16 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDF
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
-LABEL summary="Limitador operator container image" \
+LABEL com.redhat.component="limitador-operator" \
+      name="Limitador Operator" \
+      release="0.0.1" \
+      url="registry.redhat.io/rhcl-1/limitador-operator" \
+      summary="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \
       description="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \
-            com.redhat.component="limitador-operator" \
-            name="limitador-operator" \
-            io.k8s.display-name="Limitador Operator" \
-            io.k8s.description="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \
-            io.openshift.expose-services="" \
-            io.openshift.tags="rate limiting, Limitador, api" \
+      io.k8s.description="" \
+      io.k8s.display-name="Limitador Operator" \
+      io.openshift.expose-services="" \
+      io.openshift.tags="api" \
       vendor="Red Hat, Inc."
 
 ENV OPERATOR_BINARY_NAME="manager" \
