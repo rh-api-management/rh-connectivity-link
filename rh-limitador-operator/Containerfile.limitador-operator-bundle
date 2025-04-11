@@ -36,8 +36,15 @@ LABEL operators.operatorframework.io.test.mediatype.v1=scorecard+v1
 LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 
 LABEL summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+      name="limitador-operator-bundle" \
+      release="0.0.1" \
+      com.redhat.component="limitador-operator-bundle" \
+      distribution-scope="public" \
+      url="" \
+      version="0.0.1" \
       description="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
       io.k8s.display-name="Red Hat Connectivity Link Operator metadata" \
+      io.k8s.description="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
       io.openshift.expose-services="" \
       io.openshift.tags="api" \
       vendor="Red Hat, Inc."
