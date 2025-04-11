@@ -50,7 +50,10 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 LABEL summary="authorino operator container image" \
       description="authorino Operator provides an easy way to install authorino, providing configurability options at the time of installation." \
+            name="authorino-operator" \
+            com.redhat.component="authorino-operator" \
             io.k8s.display-name="authorino Operator" \
+            io.k8s.description="authorino Operator provides an easy way to install authorino, providing configurability options at the time of installation." \
             io.openshift.expose-services="" \
             io.openshift.tags="rate limiting, authorino, api" \
       vendor="Red Hat, Inc."
