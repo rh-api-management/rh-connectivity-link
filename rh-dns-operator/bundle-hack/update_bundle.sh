@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export DNS_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-dns-operator@sha256:d867c1bab3981c5fa084dbf933c76f65363ebe7be5683a0b2f924513f911f0c1"
+export DNS_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-dns-operator@sha256:c752e37deccac5bc90b60418af4040bc852afcb078592edd96eb37de389a827c"
 export CSV_FILE=/manifests/dns-operator.clusterserviceversion.yaml
 
 sed -i -e "s|quay.io/kuadrant/dns-operator:.*|\"${DNS_OPERATOR_IMAGE_PULLSPEC}\"|g" \
