@@ -37,6 +37,7 @@ LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 
 LABEL com.redhat.component="limitador-operator-bundle" \
       name="Limitador Operator Bundle" \
+      version="0.0.1" \
       release="0.0.1" \
       url="registry.redhat.io/rhcl-1/limitador-operator-bundle" \
       summary="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \

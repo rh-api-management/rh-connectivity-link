@@ -43,6 +43,7 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 LABEL com.redhat.component="limitador-operator" \
       name="Limitador Operator" \
+      version="0.0.1" \
       release="0.0.1" \
       url="registry.redhat.io/rhcl-1/limitador-operator" \
       summary="Limitador Operator provides an easy way to install Limitador, providing configurability options at the time of installation." \

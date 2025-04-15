@@ -54,8 +54,7 @@ limitador_operator_csv['metadata']['annotations']['features.operators.openshift.
 limitador_operator_csv['metadata']['annotations']['features.operators.openshift.io/cnf'] = 'false'
 limitador_operator_csv['metadata']['annotations']['features.operators.openshift.io/cni'] = 'false'
 limitador_operator_csv['metadata']['annotations']['features.operators.openshift.io/csi'] = 'false'
-limitador_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
-limitador_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
+limitador_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '["Red Hat Connectivity Link"]'
 dump_manifest(os.getenv('CSV_FILE'), limitador_operator_csv)
 CSV_UPDATE
 
