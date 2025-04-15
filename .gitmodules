@@ -26,3 +26,7 @@
 	path = rh-authorino-operator/authorino-operator
 	url = https://github.com/Kuadrant/authorino-operator/
 	branch = main
+[submodule "rh-console-plugin/kuadrant-console-plugin"]
+	path = rh-console-plugin/kuadrant-console-plugin
+	url = https://github.com/Kuadrant/kuadrant-console-plugin
+	branch = main
