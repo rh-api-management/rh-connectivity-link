@@ -6,3 +6,5 @@ packages:
   - python3
   - python3-pip
   - skopeo
+arches:
+  - x86_64
