@@ -1,14 +1,10 @@
-#--------------------------------------------------------------------------------------
-# https://gitlab.cee.redhat.com/istio/konflux/kiali/-/blob/ossm-3.0/ossmc.Containerfile?ref_type=heads
-#--------------------------------------------------------------------------------------
-    
 FROM registry.access.redhat.com/ubi9/nodejs-22@sha256:ab6c06c0109862fc7da56f9acdc6df35d06da08df0c301f4f0b931d07ac6c494 as console-plugin-builder
 
 USER root
 
 RUN dnf update -y && \
     dnf upgrade -y && \
-    dnf module enable nodejs:20 nginx:1.24 -y && \
+    dnf module enable nodejs:22 nginx:1.24 -y && \
     dnf install -y nodejs nginx && \
     npm install -g yarn
 
@@ -20,10 +16,11 @@ RUN mkdir -p /var/cache/nginx /var/log/nginx /run && \
 
 WORKDIR /usr/src/app
 
-COPY package.json yarn.lock ./
+COPY ./kuadrant-console-plugin/package.json ./kuadrant-console-plugin/yarn.lock ./
 RUN yarn install --frozen-lockfile --ignore-optional
 
-COPY . .
+# Copying rest of contents into container
+COPY ./kuadrant-console-plugin/. .
 
 RUN yarn build
 RUN pwd && ls -la
@@ -37,6 +34,16 @@ RUN test -f /usr/share/nginx/html/plugin-manifest.json && \
     test -f /usr/share/nginx/html/entrypoint.sh && \
     test -d /usr/share/nginx/html/locales && \
     echo "All required files are present."
+
+LABEL version="0.0.18" \
+    com.redhat.component="rhcl-console-plugin-container" \
+    name="rhcl-1/rhcl-console-plugin-rhel9" \
+    summary="Red Hat Connectivity Link Console Plugin" \
+    description="Red Hat Connectivity Link Console Plugin" \
+    io.k8s.display-name="Red Hat Connectivity Link Console Plugin" \
+    io.openshift.tags="api" \
+    maintainer="jmadigan@redhat.com" 
+
 
 USER 1001
 ENTRYPOINT ["/usr/share/nginx/html/entrypoint.sh"]
