@@ -4,5 +4,4 @@ contentOrigin:
 packages:
   - nginx
   - nginx-core
-  - nginx-filesystem  
-  - nginx-mimetypes
+  - nginx-filesystem
