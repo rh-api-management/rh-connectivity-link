@@ -1,0 +1,8 @@
+contentOrigin:
+  repofiles:
+    - ./ubi.repo
+packages:
+  - nginx
+  - nginx-core
+  - nginx-filesystem  
+  - nginx-mimetypes

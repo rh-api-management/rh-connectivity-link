@@ -2,11 +2,20 @@ FROM registry.access.redhat.com/ubi9/nodejs-22@sha256:ab6c06c0109862fc7da56f9acd
 
 USER root
 
-RUN dnf update -y && \
-    dnf upgrade -y && \
-    dnf module enable nodejs:22 nginx:1.24 -y && \
-    dnf install -y nodejs nginx && \
-    npm install -g yarn
+WORKDIR /src/yarn
+
+# Copy the yarn installation folder
+COPY yarn-install .
+
+# Install yarn
+RUN npm install --offline && \
+    ln -s $PWD/node_modules/yarn/bin/yarn /usr/local/bin/yarn && \
+    \
+    # Show node and yarn versions
+    node --version && \
+    yarn --version
+
+RUN dnf module enable nginx:1.24 -y && dnf install nginx -y
 
 RUN yarn config set network-concurrency 1 && \
     yarn config set network-timeout 100000
