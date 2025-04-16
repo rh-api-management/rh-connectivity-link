@@ -8,6 +8,7 @@ WORKDIR /src/yarn
 COPY yarn-install .
 
 # Install yarn
+
 RUN npm install --offline && \
     ln -s $PWD/node_modules/yarn/bin/yarn /usr/local/bin/yarn && \
     \
@@ -26,12 +27,12 @@ RUN mkdir -p /var/cache/nginx /var/log/nginx /run && \
 WORKDIR /usr/src/app
 
 COPY ./kuadrant-console-plugin/package.json ./kuadrant-console-plugin/yarn.lock ./
-RUN yarn install --frozen-lockfile --ignore-optional
 
+RUN yarn install --offline --frozen-lockfile --ignore-optional 
 # Copying rest of contents into container
 COPY ./kuadrant-console-plugin/. .
 
-RUN yarn build
+RUN yarn downstream-replacements && yarn build
 RUN pwd && ls -la
 RUN ls -la ./dist
 
