@@ -43,10 +43,13 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -ldflags
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 LABEL summary="Red Hat DNS Operator Container Image" \
-      description="Red Hat DNS Operator Container Image provides an easy way to install a 3scale APIcast self-managed solution, providing configurability options at the time of installation." \
-            io.k8s.display-name="Red Hat Operator" \
+      description="Red Hat DNS Operator Container Image" \
+            name="dns-operator" \
+            com.redhat.component="Red Hat DNS Operator" \
+            io.k8s.display-name="Red Hat NS Operator" \
+            io.k8s.description="Red Hat DNS Operator Container Image" \
             io.openshift.expose-services="" \
-            io.openshift.tags="3scale, apicast, api, gateway, openresty, api-gateway" \
+            io.openshift.tags="api" \
       vendor="Red Hat, Inc."
 
 ENV OPERATOR_BINARY_NAME="manager" \
