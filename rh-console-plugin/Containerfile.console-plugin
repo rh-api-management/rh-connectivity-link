@@ -28,9 +28,9 @@ WORKDIR /usr/src/app
 
 COPY ./kuadrant-console-plugin/package.json ./kuadrant-console-plugin/yarn.lock ./
 
-# specifying where to install yarn dependencies from
-RUN echo "Installing yarn dependencies from cachi2 prefetches"
-RUN . /cachi2/cachi2.env && yarn install --offline --frozen-lockfile --ignore-optional /cachi2/output/deps/yarn/*
+RUN echo "Listing contents of yarn prefetched dependencies directory"
+RUN ls -la /cachi2/output/deps/yarn-classic
+RUN . /cachi2/cachi2.env && yarn install --offline --frozen-lockfile --ignore-optional /cachi2/output/deps/yarn-classic/*
 
 # Copying rest of contents into container
 COPY ./kuadrant-console-plugin/. .
