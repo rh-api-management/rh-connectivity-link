@@ -15,7 +15,7 @@ RUN npm install --offline && \
     node --version && \
     yarn --version
 
-RUN dnf module enable nginx:1.24 -y && dnf install nginx -y
+RUN dnf install nginx -y
 
 RUN yarn config set network-concurrency 1 && \
     yarn config set network-timeout 100000
