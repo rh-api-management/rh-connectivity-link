@@ -55,6 +55,7 @@ authorino_operator_csv['metadata']['annotations']['features.operators.openshift.
 authorino_operator_csv['metadata']['annotations']['features.operators.openshift.io/csi'] = 'false'
 authorino_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
 authorino_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
+authorino_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '["Red Hat Connectivity Link"]'
 dump_manifest(os.getenv('CSV_FILE'), authorino_operator_csv)
 CSV_UPDATE
 
