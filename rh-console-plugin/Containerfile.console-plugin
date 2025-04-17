@@ -34,8 +34,10 @@ RUN ls -la /cachi2/output/deps/yarn-classic
 RUN . /cachi2/cachi2.env && yarn add file:/cachi2/output/deps/yarn-classic/cypress-13.12.0.tgz
 RUN . /cachi2/cachi2.env && yarn add file:/cachi2/output/deps/yarn-classic/cypress-multi-reporters-1.6.2.tgz
 
-RUN yarn install --offline --frozen-lockfile --ignore-optional
 RUN cat /cachi2/cachi2.env
+
+RUN yarn install --offline --frozen-lockfile --ignore-optional
+
 
 # Copying rest of contents into container
 COPY ./kuadrant-console-plugin/. .
