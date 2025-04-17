@@ -19,9 +19,7 @@ RUN npm install --offline && \
 RUN dnf install nginx -y
 
 RUN yarn config set network-concurrency 1 && \
-    yarn config set network-timeout 100000 \
-    yarn config set yarn-offline-mirror /cachi2/output/deps/yarn-classic/ \
-    yarn config set yarn-offline-mirror-pruning false
+    yarn config set network-timeout 100000
 
 RUN mkdir -p /var/cache/nginx /var/log/nginx /run && \
     chmod -R 777 /var/cache/nginx /var/log/nginx /run /usr/share/nginx/html/
@@ -36,7 +34,7 @@ RUN ls -la /cachi2/output/deps/yarn-classic
 # RUN . /cachi2/cachi2.env && yarn add file:/cachi2/output/deps/yarn-classic/cypress-13.12.0.tgz
 # RUN . /cachi2/cachi2.env && yarn add file:/cachi2/output/deps/yarn-classic/cypress-multi-reporters-1.6.2.tgz
 
-RUN yarn install --offline --frozen-lockfile --ignore-optional
+RUN yarn install --offline --ignore-optional
 
 
 # Copying rest of contents into container
