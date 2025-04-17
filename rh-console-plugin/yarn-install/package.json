@@ -2,7 +2,8 @@
     "name": "yarn-install",
     "version": "0.0.0",
     "dependencies": {
-      "yarn": "^1.22.22"
+      "yarn": "^1.22.22",
+      "cypress": "13.12.0"
     }
   }
   
