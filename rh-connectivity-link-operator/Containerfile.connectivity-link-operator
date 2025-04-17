@@ -41,11 +41,14 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDF
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
-LABEL summary="APIcast operator container image" \
-      description="APIcast Operator provides an easy way to install a 3scale APIcast self-managed solution, providing configurability options at the time of installation." \
-            io.k8s.display-name="APIcast Operator" \
+LABEL summary="connectivity link operator leverages Gateway API and Policy Attachment to enhance gateway providers like Istio and Envoy Gateway with additional features via Policies " \
+      description="connectivity link operator leverages Gateway API and Policy Attachment to enhance gateway providers like Istio and Envoy Gateway with additional features via Policies." \
+            name="connectivity-link-operator" \
+            com.redhat.component="connectivity-link-operator" \
+            io.k8s.display-name="connectivity link operator" \
             io.openshift.expose-services="" \
-            io.openshift.tags="3scale, apicast, api, gateway, openresty, api-gateway" \
+            io.k8s.description="connectivity link operator" \
+            io.openshift.tags="api, gateway, api-gateway" \
       vendor="Red Hat, Inc."
 
 ENV OPERATOR_BINARY_NAME="manager" \

@@ -30,6 +30,7 @@ LABEL operators.operatorframework.io.test.mediatype.v1=scorecard+v1
 LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 
 LABEL summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+      name="Red Hat Connectivity Link Operator" \
       description="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
       io.k8s.display-name="Red Hat Connectivity Link Operator metadata" \
       io.openshift.expose-services="" \
