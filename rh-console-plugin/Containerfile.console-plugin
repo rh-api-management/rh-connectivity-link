@@ -10,6 +10,9 @@ COPY yarn-install .
 # Set cypress environment variable for install
 RUN export CYPRESS_INSTALL_BINARY=/cachi2/output/deps/yarn-classic/cypress-13.12.0.tgz npm install cypress
 
+# Checking if env var is set
+RUN echo $CYPRESS_INSTALL_BINARY 
+
 # Install yarn
 RUN npm install --offline && \
     ln -s $PWD/node_modules/yarn/bin/yarn /usr/local/bin/yarn && \
