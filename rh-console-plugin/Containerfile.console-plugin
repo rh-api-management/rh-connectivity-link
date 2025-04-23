@@ -25,17 +25,18 @@ RUN mkdir -p /var/cache/nginx /var/log/nginx /run && \
 
 WORKDIR /usr/src/app
 
-COPY ./kuadrant-console-plugin/package.json ./kuadrant-console-plugin/yarn.lock ./
-
-RUN echo "Listing contents of yarn prefetched dependencies directory"
-RUN ls -la /cachi2/output/deps/yarn-classic
-
-RUN yarn install --production --offline --ignore-optional --frozen-lockfile
-
 # Copying rest of contents into container
-COPY ./kuadrant-console-plugin/. .
+COPY ./kuadrant-console-plugin/ .
+RUN pwd
+WORKDIR /usr/src/app/kuadrant-console-plugin
 
-RUN yarn downstream-replacements && yarn build
+RUN pwd
+RUN ls -la
+
+RUN yarn install --production --offline --ignore-optional --frozen-lockfile && \
+    yarn downstream-replacements && \
+    yarn build
+
 RUN pwd && ls -la
 RUN ls -la ./dist
 
