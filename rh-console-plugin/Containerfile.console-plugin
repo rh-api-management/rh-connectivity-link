@@ -7,12 +7,6 @@ WORKDIR /src/yarn
 # Copy the yarn installation folder
 COPY yarn-install .
 
-# Set cypress environment variable for install
-RUN export CYPRESS_INSTALL_BINARY=/cachi2/output/deps/yarn-classic/cypress-13.12.0.tgz npm install cypress
-
-# Checking if env var is set
-RUN echo $CYPRESS_INSTALL_BINARY 
-
 # Install yarn
 RUN npm install --offline && \
     ln -s $PWD/node_modules/yarn/bin/yarn /usr/local/bin/yarn && \
@@ -36,11 +30,7 @@ COPY ./kuadrant-console-plugin/package.json ./kuadrant-console-plugin/yarn.lock 
 RUN echo "Listing contents of yarn prefetched dependencies directory"
 RUN ls -la /cachi2/output/deps/yarn-classic
 
-# RUN . /cachi2/cachi2.env && yarn add file:/cachi2/output/deps/yarn-classic/cypress-13.12.0.tgz
-# RUN . /cachi2/cachi2.env && yarn add file:/cachi2/output/deps/yarn-classic/cypress-multi-reporters-1.6.2.tgz
-
-RUN yarn install --offline --ignore-optional
-
+RUN yarn install --production --offline --ignore-optional --frozen-lockfile
 
 # Copying rest of contents into container
 COPY ./kuadrant-console-plugin/. .
