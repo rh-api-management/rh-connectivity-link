@@ -33,8 +33,8 @@ RUN ls -la
 
 COPY kuadrant-console-plugin/ .
 
-RUN yarn downstream-replacements && \
-    yarn build
+RUN yarn downstream-replacements
+RUN yarn build
 
 RUN pwd && ls -la
 RUN ls -la ./dist
