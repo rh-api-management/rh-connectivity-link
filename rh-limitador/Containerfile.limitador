@@ -45,6 +45,7 @@
     # Labels consumed by Red Hat build service
     # Please keep the version label first as it is looked up by the Makefile - also, it is meant to be the image tag.
     LABEL version="1.6.0" \
+            tested="test" \
             com.redhat.component="limitador-container" \
             name="rhcl-1/limitador-rhel9" \
             summary="Limitador is a generic rate-limiter written in Rust." \
