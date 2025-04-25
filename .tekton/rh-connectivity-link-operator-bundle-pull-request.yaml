@@ -579,7 +579,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-rh-connectivity-link-operator-bundle
   workspaces:
   - name: git-auth
     secret:
