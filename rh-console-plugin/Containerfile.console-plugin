@@ -26,9 +26,13 @@ RUN mkdir -p /var/cache/nginx /var/log/nginx /run && \
 WORKDIR /usr/src/app
 
 COPY ./kuadrant-console-plugin/package.json ./kuadrant-console-plugin/yarn.lock ./
+
+RUN ls -la
+
+RUN yarn clean
+RUN rm -rf ./node_modules
 RUN yarn install --production --offline --ignore-optional --frozen-lockfile
 
-RUN pwd
 RUN ls -la
 
 COPY kuadrant-console-plugin/ .
