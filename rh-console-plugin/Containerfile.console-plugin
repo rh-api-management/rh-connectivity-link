@@ -29,6 +29,9 @@ COPY ./kuadrant-console-plugin/package.json ./kuadrant-console-plugin/yarn.lock 
 
 RUN ls -la
 
+# Listing contents of deps folder for yarn
+RUN ls -la /cachi2/output/deps/yarn-classic/
+
 RUN yarn clean
 RUN rm -rf ./node_modules
 RUN yarn install --production --offline --ignore-optional --frozen-lockfile
