@@ -595,7 +595,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-rh-console-plugin
   workspaces:
   - name: git-auth
     secret:
