@@ -32,7 +32,9 @@ spec:
   - name: path-context
     value: rh-limitador-operator
   - name: prefetch-input
-    value: '[{"type": "rpm", "path": "./rh-limitador-operator"}, {"type": "gomod", "path": "rh-limitador-operator/limitador-operator"}, {"type": "pip", "path": "./rh-limitador-operator"}]'
+    value: '[{"type": "rpm", "path": "./rh-limitador-operator"}, {"type": "gomod",
+      "path": "rh-limitador-operator/limitador-operator"}, {"type": "pip", "path":
+      "./rh-limitador-operator"}]'
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.
@@ -172,7 +174,7 @@ spec:
         workspace: git-auth
     - name: prefetch-dependencies
       params:
-      - name: dev-package-managers 
+      - name: dev-package-managers
         value: "true"
       - name: input
         value: $(params.prefetch-input)
@@ -591,7 +593,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-rh-limitador-operator
   workspaces:
   - name: git-auth
     secret:
