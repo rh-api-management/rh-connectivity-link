@@ -172,7 +172,7 @@ spec:
         workspace: git-auth
     - name: prefetch-dependencies
       params:
-      - name: dev-package-managers 
+      - name: dev-package-managers
         value: "true"
       - name: input
         value: $(params.prefetch-input)
@@ -591,7 +591,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-rh-authorino
   workspaces:
   - name: git-auth
     secret:

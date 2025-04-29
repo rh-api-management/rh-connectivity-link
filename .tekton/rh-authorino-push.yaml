@@ -36,19 +36,19 @@ spec:
       _Uses `buildah` to create a container image leveraging [trusted artifacts](https://konflux-ci.dev/architecture/ADR/0036-trusted-artifacts.html). It also optionally creates a source image and runs some build-time tests. Information is shared between tasks using OCI artifacts instead of PVCs. EC will pass the [`trusted_task.trusted`](https://enterprisecontract.dev/docs/ec-policies/release_policy.html#trusted_task__trusted) policy as long as all data used to build the artifact is generated from trusted tasks.
       This pipeline is pushed as a Tekton bundle to [quay.io](https://quay.io/repository/konflux-ci/tekton-catalog/pipeline-docker-build-oci-ta?tab=tags)_
     finally:
-      - name: show-sbom
+    - name: show-sbom
+      params:
+      - name: IMAGE_URL
+        value: $(tasks.build-image-index.results.IMAGE_URL)
+      taskRef:
         params:
-          - name: IMAGE_URL
-            value: $(tasks.build-image-index.results.IMAGE_URL)
-        taskRef:
-          params:
-            - name: name
-              value: show-sbom
-            - name: bundle
-              value: quay.io/konflux-ci/tekton-catalog/task-show-sbom:0.1@sha256:04f15cbce548e1db7770eee3f155ccb2cc0140a6c371dc67e9a34d83673ea0c0
-            - name: kind
-              value: task
-          resolver: bundles
+        - name: name
+          value: show-sbom
+        - name: bundle
+          value: quay.io/konflux-ci/tekton-catalog/task-show-sbom:0.1@sha256:04f15cbce548e1db7770eee3f155ccb2cc0140a6c371dc67e9a34d83673ea0c0
+        - name: kind
+          value: task
+        resolver: bundles
     params:
     - description: Source Repository URL
       name: git-url
@@ -168,7 +168,7 @@ spec:
         workspace: git-auth
     - name: prefetch-dependencies
       params:
-      - name: dev-package-managers 
+      - name: dev-package-managers
         value: "true"
       - name: input
         value: $(params.prefetch-input)
@@ -587,7 +587,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-rh-authorino
   workspaces:
   - name: git-auth
     secret:
