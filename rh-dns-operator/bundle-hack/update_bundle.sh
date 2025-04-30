@@ -3,6 +3,10 @@
 export DNS_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-dns-operator@sha256:c752e37deccac5bc90b60418af4040bc852afcb078592edd96eb37de389a827c"
 export CSV_FILE=/manifests/dns-operator.clusterserviceversion.yaml
 
+export DESCRIPTION=$(cat DESCRIPTION)
+
+export ICON=$(cat ICON)
+
 sed -i -e "s|quay.io/kuadrant/dns-operator:.*|\"${DNS_OPERATOR_IMAGE_PULLSPEC}\"|g" \
 	"${CSV_FILE}"
 
@@ -50,6 +54,11 @@ dns_operator_csv['metadata']['annotations']['features.operators.openshift.io/cni
 dns_operator_csv['metadata']['annotations']['features.operators.openshift.io/csi'] = 'false'
 dns_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
 dns_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
+
+# Add description & icon
+dns_operator_csv['metadata']['annotations']['description'] = os.getenv('DESCRIPTION')
+dns_operator_csv['spec']['icon'][0]['base64data'] = os.getenv('ICON')
+
 dump_manifest(os.getenv('CSV_FILE'), dns_operator_csv)
 CSV_UPDATE
 
