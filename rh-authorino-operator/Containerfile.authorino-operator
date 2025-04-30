@@ -40,6 +40,7 @@ COPY ./authorino-operator/main.go main.go
 COPY ./authorino-operator/api/ api/
 COPY ./authorino-operator/controllers/ controllers/
 COPY ./authorino-operator/pkg/ pkg/
+COPY ./authorino-operator/LICENSE /licenses/LICENSE
 
 
 # Build
@@ -67,6 +68,8 @@ USER root
 # install operator binary
 COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
 RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
+
+COPY --from=builder licenses/LICENSE ./licenses/LICENSE
 
 # TODO: Install licenses
 # ENV LICENSES_DIR="/licenses/apicast-operator/"

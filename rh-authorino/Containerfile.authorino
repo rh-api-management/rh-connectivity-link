@@ -41,6 +41,8 @@ WORKDIR /home/authorino/bin
 ENV PATH=/home/authorino/bin:$PATH
 COPY --from=builder /usr/bin/authorino ./authorino
 
+COPY authorino/LICENSE /licenses/LICENSE
+
 RUN chown -R authorino:root /home/authorino \
     && chmod -R 750 /home/authorino
 USER authorino
