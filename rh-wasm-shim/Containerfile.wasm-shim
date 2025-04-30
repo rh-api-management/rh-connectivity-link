@@ -23,6 +23,8 @@
     COPY ./wasm-shim/src src
     COPY ./wasm-shim/build.rs build.rs
     COPY ./wasm-shim/vendor-protobufs vendor-protobufs
+
+    COPY wasm-shim/LICENSE /licenses/LICENSE
     
     RUN cargo build --target=wasm32-unknown-unknown --release --offline
     
@@ -47,3 +49,4 @@
               maintainer="eastizle@redhat.com"
 
     COPY --from=wasm-shim-build /usr/src/wasm-shim/target/wasm32-unknown-unknown/release/wasm_shim.wasm /plugin.wasm
+    COPY --from=wasm-shim-build licenses/LICENSE /licenses/LICENSE

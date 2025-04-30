@@ -34,6 +34,7 @@ COPY limitador-operator/api/ api/
 COPY limitador-operator/controllers/ controllers/
 COPY limitador-operator/pkg/ pkg/
 
+COPY limitador-operator/LICENSE /licenses/LICENSE
 
 # Build
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDFLAGS}$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -o ${BINARY_NAME} main.go
@@ -60,6 +61,8 @@ USER root
 # install operator binary
 COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
 RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
+
+COPY --from=builder licenses/LICENSE /licenses/LICENSE
 
 # TODO: Install licenses
 # ENV LICENSES_DIR="/licenses/apicast-operator/"
