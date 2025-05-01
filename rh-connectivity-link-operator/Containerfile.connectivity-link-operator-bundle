@@ -9,7 +9,7 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:latest as builder
 COPY bundle-hack ./bundle-hack
 COPY kuadrant-operator/bundle bundle
 
-RUN chmod +x ./bundle-hack/convert.sh && ./bundle-hack/convert.sh
+RUN chmod +x ./bundle-hack/update_bundle.sh && ./bundle-hack/update_bundle.sh
 
 FROM scratch
 
