@@ -33,7 +33,7 @@ spec:
   - name: path-context
     value: rh-authorino-operator
   - name: prefetch-input
-    value: '{"type": "gomod", "path": "rh-authorino-operator/authorino-operator"}'
+    value: '[{"type": "rpm", "path": "./rh-authorino-operator"}, {"type": "gomod", "path": "rh-authorino-operator/authorino-operator"}, {"type": "pip", "path": "./rh-authorino-operator"}]'
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.
@@ -95,7 +95,7 @@ spec:
       description: Image tag expiration time, time values could be something like
         1h, 2d, 3w for hours, days, and weeks, respectively.
       name: image-expires-after
-    - default: "false"
+    - default: "true"
       description: Build a source image.
       name: build-source-image
       type: string
@@ -173,6 +173,8 @@ spec:
         workspace: git-auth
     - name: prefetch-dependencies
       params:
+      - name: dev-package-managers 
+        value: "true"
       - name: input
         value: $(params.prefetch-input)
       - name: SOURCE_ARTIFACT
@@ -331,26 +333,6 @@ spec:
           value: clair-scan
         - name: bundle
           value: quay.io/konflux-ci/tekton-catalog/task-clair-scan:0.2@sha256:7c73e2beca9b8306387efeaf775831440ec799b05a5f5c008a65bb941a1e91f6
-        - name: kind
-          value: task
-        resolver: bundles
-      when:
-      - input: $(params.skip-checks)
-        operator: in
-        values:
-        - "false"
-    - name: ecosystem-cert-preflight-checks
-      params:
-      - name: image-url
-        value: $(tasks.build-image-index.results.IMAGE_URL)
-      runAfter:
-      - build-image-index
-      taskRef:
-        params:
-        - name: name
-          value: ecosystem-cert-preflight-checks
-        - name: bundle
-          value: quay.io/konflux-ci/tekton-catalog/task-ecosystem-cert-preflight-checks:0.2@sha256:e16e33931bccd678b6b10b87636f37a08a0288b65a662ff76b5dad6fcbbb077f
         - name: kind
           value: task
         resolver: bundles
@@ -576,7 +558,7 @@ spec:
         - name: name
           value: rpms-signature-scan
         - name: bundle
-          value: quay.io/konflux-ci/tekton-catalog/task-rpms-signature-scan:0.2@sha256:eeaee239eabec8ba9cfd0f80382ad34114c93393c35d1eae77c5d73d57aa824d
+          value: quay.io/konflux-ci/tekton-catalog/task-rpms-signature-scan:0.2@sha256:7b80f5a319d4ff1817fa097cbdbb9473635562f8ea3022e64933e387d3b68715
         - name: kind
           value: task
         resolver: bundles

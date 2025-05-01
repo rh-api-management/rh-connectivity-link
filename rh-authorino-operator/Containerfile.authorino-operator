@@ -49,14 +49,17 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDF
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
-LABEL summary="authorino operator container image" \
-      description="authorino Operator provides an easy way to install authorino, providing configurability options at the time of installation." \
-            name="authorino-operator" \
-            com.redhat.component="authorino-operator" \
-            io.k8s.display-name="authorino Operator" \
-            io.k8s.description="authorino Operator provides an easy way to install authorino, providing configurability options at the time of installation." \
-            io.openshift.expose-services="" \
-            io.openshift.tags="rate limiting, authorino, api" \
+LABEL com.redhat.component="authorino-operator" \
+      name="Authorino Operator" \
+      version="0.0.1" \
+      release="0.0.1" \
+      url="registry.redhat.io/rhcl-1/authorino-operator" \
+      summary="Enables authentication and authorization for Gateways and applications in a Gateway API network." \
+      description="Enables authentication and authorization for Gateways and applications in a Gateway API network." \
+      io.k8s.description="" \
+      io.k8s.display-name="Authorino Operator" \
+      io.openshift.expose-services="" \
+      io.openshift.tags="api" \
       vendor="Red Hat, Inc."
 
 ENV OPERATOR_BINARY_NAME="manager" \
