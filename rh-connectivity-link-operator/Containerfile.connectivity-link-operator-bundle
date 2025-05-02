@@ -6,10 +6,12 @@
 # Use a new stage to enable caching of the package installations for local development
 # FROM builder-runner as builder
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest as builder
-COPY bundle-hack ./bundle-hack
-COPY kuadrant-operator/bundle bundle
 
-RUN chmod +x ./bundle-hack/update_bundle.sh && ./bundle-hack/update_bundle.sh
+COPY ./bundle-hack/ .
+COPY kuadrant-operator/bundle/manifests /manifests/
+COPY kuadrant-operator/bundle/metadata /metadata/
+
+RUN chmod +x update_bundle.sh && ./update_bundle.sh
 
 FROM scratch
 
@@ -39,4 +41,4 @@ LABEL summary="Red Hat Connectivity Link enables you to secure, protect, and con
 # Copy files to locations specified by labels.
 COPY --from=builder /manifests /manifests/
 COPY --from=builder /metadata /metadata/
-COPY rh-connectivity-link-operator/kuadrant-operator/bundle/tests/scorecard /tests/scorecard/
+COPY kuadrant-operator/bundle/tests/scorecard /tests/scorecard/
