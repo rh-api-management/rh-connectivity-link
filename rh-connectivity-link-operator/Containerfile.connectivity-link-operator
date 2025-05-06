@@ -29,9 +29,9 @@ COPY kuadrant-operator/go.sum go.sum
 RUN go mod download
 
 # Copy the go source
-COPY kuadrant-operator/main.go main.go
+COPY kuadrant-operator/cmd/main.go cmd/main.go
 COPY kuadrant-operator/api/ api/
-COPY kuadrant-operator/controllers/ controllers/
+COPY kuadrant-operator/internal/ internal/
 COPY kuadrant-operator/pkg/ pkg/
 
 
