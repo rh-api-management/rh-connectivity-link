@@ -2,6 +2,8 @@ FROM registry.access.redhat.com/ubi9/nodejs-22@sha256:ab6c06c0109862fc7da56f9acd
 
 USER root
 
+RUN dnf install nginx npm -y
+
 WORKDIR /src/yarn
 
 # Copy the yarn installation folder
@@ -15,8 +17,6 @@ RUN npm install --offline && \
     node --version && \
     yarn --version
 
-RUN dnf install nginx -y
-
 RUN yarn config set network-concurrency 1 && \
     yarn config set network-timeout 100000
 
@@ -29,9 +29,6 @@ COPY ./kuadrant-console-plugin/package.json ./kuadrant-console-plugin/yarn.lock 
 
 RUN ls -la
 
-# Listing contents of deps folder for yarn
-RUN ls -la /cachi2/output/deps/yarn-classic/
-
 RUN yarn clean
 RUN rm -rf ./node_modules
 RUN yarn install --production --offline --frozen-lockfile
@@ -40,7 +37,7 @@ RUN ls -la
 
 COPY kuadrant-console-plugin/ .
 
-RUN yarn downstream-replacements --offline
+RUN yarn downstream-replacements
 RUN yarn build
 
 RUN pwd && ls -la
