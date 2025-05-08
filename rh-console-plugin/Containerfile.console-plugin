@@ -1,14 +1,15 @@
-FROM registry.access.redhat.com/ubi9/nodejs-22@sha256:ab6c06c0109862fc7da56f9acdc6df35d06da08df0c301f4f0b931d07ac6c494 as console-plugin-builder
+FROM registry.access.redhat.com/ubi9/nodejs-22@sha256:9594067bd622662b760fbf4f9075362ee372a307a90bd28041e59428fa82d205 as console-plugin-builder
 
 USER root
 
-RUN dnf install nginx npm -y
+RUN dnf module enable nodejs:22 && \
+    dnf install -y nodejs nginx npm
 
 WORKDIR /src/yarn
 
 # Copy the yarn installation folder
 COPY yarn-install .
-
+    
 # Install yarn
 RUN npm install --offline && \
     ln -s $PWD/node_modules/yarn/bin/yarn /usr/local/bin/yarn && \
@@ -25,17 +26,20 @@ RUN mkdir -p /var/cache/nginx /var/log/nginx /run && \
 
 WORKDIR /usr/src/app
 
-COPY ./kuadrant-console-plugin/package.json ./kuadrant-console-plugin/yarn.lock ./
+COPY kuadrant-console-plugin/package.json kuadrant-console-plugin/yarn.lock ./
 
 RUN ls -la
 
 RUN yarn clean
 RUN rm -rf ./node_modules
-RUN yarn install --production --offline --frozen-lockfile
+
+RUN yarn install --production --frozen-lockfile --offline
 
 RUN ls -la
 
 COPY kuadrant-console-plugin/ .
+
+RUN ls -la ./node_modules/
 
 RUN yarn downstream-replacements
 RUN yarn build
@@ -45,12 +49,18 @@ RUN ls -la ./dist
 
 RUN cp -r ./dist/* /usr/share/nginx/html/
 
-COPY entrypoint.sh /usr/share/nginx/html/entrypoint.sh
+RUN ls -la /usr/share/nginx/html/
+
+RUN cp entrypoint.sh /usr/share/nginx/html/
+
+RUN ls -la
 
 RUN test -f /usr/share/nginx/html/plugin-manifest.json && \
     test -f /usr/share/nginx/html/entrypoint.sh && \
     test -d /usr/share/nginx/html/locales && \
     echo "All required files are present."
+
+RUN echo "Image build complete"
 
 LABEL version="0.0.18" \
     com.redhat.component="rhcl-console-plugin-container" \
@@ -63,4 +73,5 @@ LABEL version="0.0.18" \
 
 
 USER 1001
+
 ENTRYPOINT ["/usr/share/nginx/html/entrypoint.sh"]
