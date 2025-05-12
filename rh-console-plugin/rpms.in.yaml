@@ -1,0 +1,8 @@
+contentOrigin:
+  repofiles:
+    - ./ubi.repo
+packages:
+  - npm
+  - nginx
+  - nginx-core
+  - nginx-filesystem
