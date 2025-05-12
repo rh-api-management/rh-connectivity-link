@@ -33,7 +33,7 @@ RUN ls -la
 RUN yarn clean
 RUN rm -rf ./node_modules
 
-RUN yarn install --ignore-optional --offline
+RUN yarn install --offline
 
 RUN ls -la
 
