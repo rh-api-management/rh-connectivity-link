@@ -41,8 +41,11 @@ COPY kuadrant-console-plugin/ .
 
 RUN ls -la ./node_modules/
 
-RUN yarn downstream-replacements
-RUN yarn build
+# Run downstream replacements script
+#RUN node downstream.js && yarn i18n --offline
+
+RUN yarn downstream-replacements --offline
+RUN yarn build --offline
 
 RUN pwd && ls -la
 RUN ls -la ./dist
