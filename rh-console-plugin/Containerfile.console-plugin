@@ -33,7 +33,7 @@ RUN ls -la
 RUN yarn clean
 RUN rm -rf ./node_modules
 
-RUN yarn install --production --frozen-lockfile --offline
+RUN yarn install --ignore-optional --offline
 
 RUN ls -la
 
@@ -43,9 +43,8 @@ RUN ls -la ./node_modules/
 
 # Run downstream replacements script
 #RUN node downstream.js && yarn i18n --offline
-
-RUN yarn downstream-replacements --offline
-RUN yarn build --offline
+RUN yarn downstream-replacements
+RUN yarn build
 
 RUN pwd && ls -la
 RUN ls -la ./dist
