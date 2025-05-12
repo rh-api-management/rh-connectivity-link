@@ -1,8 +1,10 @@
-FROM registry.access.redhat.com/ubi9/nodejs-22@sha256:9594067bd622662b760fbf4f9075362ee372a307a90bd28041e59428fa82d205 as console-plugin-builder
+FROM registry.access.redhat.com/ubi9/nodejs-22@sha256:9594067bd622662b760fbf4f9075362ee372a307a90bd28041e59428fa82d205 AS builder
 
 USER root
 
-RUN dnf module enable nodejs:22 && \
+ENV NODE_VERSION=22
+
+RUN dnf module enable nodejs:${NODE_VERSION} && \
     dnf install -y nodejs nginx npm
 
 WORKDIR /src/yarn
@@ -26,23 +28,20 @@ RUN mkdir -p /var/cache/nginx /var/log/nginx /run && \
 
 WORKDIR /usr/src/app
 
+# Copy over the package.json/lock file only 
 COPY kuadrant-console-plugin/package.json kuadrant-console-plugin/yarn.lock ./
 
-RUN ls -la
-
+# Cleaning up dependencies
 RUN yarn clean
 RUN rm -rf ./node_modules
 
+# Tell yarn to fetch dependencies from /cachi2/output/deps/yarn-classic/
 RUN yarn install --offline
 
-RUN ls -la
-
+# Copy the rest of the contents from upstream repo to container
 COPY kuadrant-console-plugin/ .
 
-RUN ls -la ./node_modules/
-
-# Run downstream replacements script
-#RUN node downstream.js && yarn i18n --offline
+# Run downstream replacements script & production build
 RUN yarn downstream-replacements
 RUN yarn build
 
@@ -51,28 +50,21 @@ RUN ls -la ./dist
 
 RUN cp -r ./dist/* /usr/share/nginx/html/
 
-RUN ls -la /usr/share/nginx/html/
-
 RUN cp entrypoint.sh /usr/share/nginx/html/
-
-RUN ls -la
 
 RUN test -f /usr/share/nginx/html/plugin-manifest.json && \
     test -f /usr/share/nginx/html/entrypoint.sh && \
     test -d /usr/share/nginx/html/locales && \
     echo "All required files are present."
 
-RUN echo "Image build complete"
-
 LABEL version="0.0.18" \
     com.redhat.component="rhcl-console-plugin-container" \
     name="rhcl-1/rhcl-console-plugin-rhel9" \
     summary="Red Hat Connectivity Link Console Plugin" \
-    description="Red Hat Connectivity Link Console Plugin" \
+    description="Console Plugin for Red Hat Connectivity Link" \
     io.k8s.display-name="Red Hat Connectivity Link Console Plugin" \
     io.openshift.tags="api" \
     maintainer="jmadigan@redhat.com" 
-
 
 USER 1001
 
