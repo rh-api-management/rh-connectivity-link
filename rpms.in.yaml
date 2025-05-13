@@ -1,0 +1,29 @@
+contentOrigin:
+  repofiles:
+    - ./ubi.repo
+    - ./redhat.repo
+packages:
+  - cargo
+  - jq
+  - python3
+  - python3-pip
+  - skopeo
+  - shadow-utils
+  - npm
+  - nginx
+  - nginx-core
+  - nginx-filesystem
+  - rust-toolset
+  - llvm-toolset
+  - gcc-c++
+  - gcc-toolset-12-binutils-gold
+  - protobuf-devel
+  - protobuf-compiler
+  - openssl-devel
+  - perl
+  - git
+  - shadow-utils
+  - libgcc
+  - rust-std-static-wasm32-unknown-unknown
+arches:
+  - x86_64
