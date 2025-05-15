@@ -19,11 +19,11 @@ packages:
   - gcc-toolset-12-binutils-gold
   - protobuf-devel
   - protobuf-compiler
+  - rust-std-static-wasm32-unknown-unknown
   - openssl-devel
   - perl
   - git
   - shadow-utils
   - libgcc
-  - rust-std-static-wasm32-unknown-unknown
 arches:
   - x86_64
