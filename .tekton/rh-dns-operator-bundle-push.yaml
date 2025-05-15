@@ -29,7 +29,7 @@ spec:
   - name: path-context
     value: rh-dns-operator
   - name: prefetch-input
-    value: '[{"type": "rpm", "path": "./rh-dns-operator"}, {"type": "gomod", "path":
+    value: '[{"type": "rpm", "path": "."}, {"type": "gomod", "path":
       "rh-dns-operator/dns-operator"}, {"type": "pip", "path": "./rh-dns-operator"}]'
   pipelineSpec:
     description: |
