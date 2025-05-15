@@ -2,7 +2,7 @@
 # Build Stage
 # ------------------------------------------------------------------------------
 
-    FROM registry.redhat.io/ubi9:9.5 as wasm-shim-build
+    FROM registry.redhat.io/ubi9:9.6-1747219013 as wasm-shim-build
 
     ARG GITHUB_SHA
     ENV GITHUB_SHA=${GITHUB_SHA:-unknown}
