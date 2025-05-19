@@ -6,6 +6,10 @@ export LIMITADOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-te
 
 export CSV_FILE=/manifests/limitador-operator.clusterserviceversion.yaml
 
+export DESCRIPTION=$(cat DESCRIPTION)
+
+export ICON=$(cat ICON)
+
 sed -i -e "s|quay.io/kuadrant/limitador-operator:.*|\"${LIMITADOR_OPERATOR_IMAGE_PULLSPEC}\"|g" \
 	"${CSV_FILE}"
 
@@ -56,6 +60,11 @@ limitador_operator_csv['metadata']['annotations']['features.operators.openshift.
 limitador_operator_csv['metadata']['annotations']['features.operators.openshift.io/csi'] = 'false'
 limitador_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
 limitador_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
+
+# Add description & icon
+limitador_operator_csv['metadata']['annotations']['description'] = os.getenv('DESCRIPTION')
+limitador_operator_csv['spec']['icon'][0]['base64data'] = os.getenv('ICON')
+
 dump_manifest(os.getenv('CSV_FILE'), limitador_operator_csv)
 CSV_UPDATE
 

@@ -408,6 +408,8 @@ spec:
         - "false"
     - name: sast-coverity-check
       params:
+      - name: IMAGE
+        value: $(params.output-image)
       - name: image-digest
         value: $(tasks.build-image-index.results.IMAGE_DIGEST)
       - name: image-url

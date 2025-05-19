@@ -5,6 +5,10 @@ export AUTHORINO_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-te
 
 export CSV_FILE=/manifests/authorino-operator.clusterserviceversion.yaml
 
+export DESCRIPTION=$(cat DESCRIPTION)
+ 
+export ICON=$(cat ICON)
+
 sed -i -e "s|quay.io/kuadrant/authorino-operator:.*|\"${AUTHORINO_OPERATOR_IMAGE_PULLSPEC}\"|g" \
 	"${CSV_FILE}"
 
@@ -56,6 +60,11 @@ authorino_operator_csv['metadata']['annotations']['features.operators.openshift.
 authorino_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
 authorino_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
 authorino_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '["Red Hat Connectivity Link"]'
+
+# Add description & icon
+authorino_operator_csv['metadata']['annotations']['description'] = os.getenv('DESCRIPTION')
+authorino_operator_csv['spec']['icon'][0]['base64data'] = os.getenv('ICON')
+
 dump_manifest(os.getenv('CSV_FILE'), authorino_operator_csv)
 CSV_UPDATE
 

@@ -11,7 +11,7 @@ RUN . /cachi2/cachi2.env && \
 # Use a new stage to enable caching of the package installations for local development
 FROM builder-runner AS builder
 
-COPY bundle-hack .
+COPY ./bundle-hack/ .
 COPY limitador-operator/bundle/manifests /manifests/
 COPY limitador-operator/bundle/metadata /metadata/
 
