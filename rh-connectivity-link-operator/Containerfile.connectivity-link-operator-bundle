@@ -5,7 +5,7 @@
 
 # Use a new stage to enable caching of the package installations for local development
 # FROM builder-runner as builder
-FROM registry.access.redhat.com/ubi9/ubi-minimal:latest as builder
+FROM registry.access.redhat.com/ubi9/ubi-minimal@sha256:92b1d5747a93608b6adb64dfd54515c3c5a360802db4706765ff3d8470df6290 as builder
 
 COPY ./bundle-hack/ .
 COPY kuadrant-operator/bundle/manifests /manifests/

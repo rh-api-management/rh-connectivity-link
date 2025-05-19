@@ -5,7 +5,7 @@
     # Use bullseye as build image instead of Bookworm as ubi9 does not not have GLIBCXX_3.4.30
     # https://access.redhat.com/solutions/6969351
 
-    FROM registry.redhat.io/ubi9/ubi:latest AS limitador-build
+    FROM registry.redhat.io/ubi9/ubi@sha256:304b50df1ea4db9706d8a30f4bbf26f582936ebc80c7e075c72ff2af99292a54 AS limitador-build
 
     RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git"  \
     && dnf install --nodocs --assumeyes $PKGS \
