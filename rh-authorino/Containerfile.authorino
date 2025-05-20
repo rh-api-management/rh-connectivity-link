@@ -27,14 +27,14 @@ RUN useradd -u 1000 -s /bin/sh -m -d /home/authorino authorino
 
 LABEL summary="authorino container image" \
       description="authorino container image provides an easy way to install authorino" \
-            com.redhat.component="authorino" \
-            name="authorino" \
-            description="authorino container image provides an easy way to install authorino" \
-            summary="authorino container image" \
-            io.k8s.display-name="authorino" \
-            io.k8s.description="authorino container image provides an easy way to install authorino, providing configurability options at the time of installation." \
-            io.k8s.display-name="authorino Operator" \
-            io.openshift.tags="rate limiting, authorino, api" \
+      com.redhat.component="authorino" \
+      name="authorino" \
+      description="authorino container image provides an easy way to install authorino" \
+      summary="authorino container image" \
+      io.k8s.display-name="authorino" \
+      io.k8s.description="authorino container image provides an easy way to install authorino, providing configurability options at the time of installation." \
+      io.k8s.display-name="authorino Operator" \
+      io.openshift.tags="rate limiting, authorino, api" \
       vendor="Red Hat, Inc."
 
 WORKDIR /home/authorino/bin

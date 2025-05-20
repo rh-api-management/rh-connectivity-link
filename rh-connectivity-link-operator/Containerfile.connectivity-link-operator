@@ -40,11 +40,16 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "-X ma
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
-LABEL summary="APIcast operator container image" \
-      description="APIcast Operator provides an easy way to install a 3scale APIcast self-managed solution, providing configurability options at the time of installation." \
-            io.k8s.display-name="APIcast Operator" \
-            io.openshift.expose-services="" \
-            io.openshift.tags="3scale, apicast, api, gateway, openresty, api-gateway" \
+LABEL summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+      version="" \
+      name="Red Hat Connectivity Link Operator Bundle" \
+      description="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+      io.k8s.display-name="Red Hat Connectivity Link Operator metadata" \
+      io.k8s.description="Red Hat Connnectivity Link Operator" \
+      io.openshift.expose-services="" \
+      io.openshift.tags="api" \
+      url="redhat.com" \
+      com.redhat.component="" \
       vendor="Red Hat, Inc."
 
 ENV OPERATOR_BINARY_NAME="manager" \

@@ -64,6 +64,7 @@ LABEL version="0.0.18" \
     description="Console Plugin for Red Hat Connectivity Link" \
     io.k8s.display-name="Red Hat Connectivity Link Console Plugin" \
     io.openshift.tags="api" \
+    io.k8s.description="" \
     maintainer="jmadigan@redhat.com" 
 
 USER 1001

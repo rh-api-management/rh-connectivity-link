@@ -36,10 +36,19 @@ LABEL operators.operatorframework.io.test.mediatype.v1=scorecard+v1
 LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 
 LABEL summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+      version="" \
+      name="Red Hat Connectivity Link Operator Bundle" \
       description="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
       io.k8s.display-name="Red Hat Connectivity Link Operator metadata" \
+      io.k8s.description="Red Hat Connnectivity Link Operator" \
       io.openshift.expose-services="" \
       io.openshift.tags="api" \
+      url="" \
+      distribution-scope="public" \
+      release="0.0.1" \
+      version="0.0.1" \
+      url="" \
+      com.redhat.component="Red Hat Connectivity Link Operator Bundle" \
       vendor="Red Hat, Inc."
 
 # Copy files to locations specified by labels.
