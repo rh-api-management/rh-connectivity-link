@@ -23,4 +23,5 @@ sources:
     config:
       include:
         - '@redhat'
-      exclude: []
+      exclude:
+        - rpm_repos.ids_known
