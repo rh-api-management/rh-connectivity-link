@@ -25,5 +25,3 @@ sources:
         - '@redhat'
       exclude:
         - 'rpm_repos.ids_known'
-        - 'olm.allowed_registries:quay.io/kuadrant/console-plugin'
-        - 'cve.cve_blockers:GHSA-j777-63hf-hx76'
