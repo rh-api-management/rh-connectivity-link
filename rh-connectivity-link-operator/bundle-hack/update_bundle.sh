@@ -62,8 +62,8 @@ rhcl_operator_csv['metadata']['annotations']['features.operators.openshift.io/cn
 rhcl_operator_csv['metadata']['annotations']['features.operators.openshift.io/cni'] = 'false'
 rhcl_operator_csv['metadata']['annotations']['features.operators.openshift.io/csi'] = 'false'
 rhcl_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '["Red Hat Connectivity Link"]'
-csv_manifest['metadata']['annotations']['repository'] = 'https://github.com/kuadrant/kuadrant-operator'
-csv_manifest['metadata']['annotations']['containerImage'] = os.getenv('CONNECTIVITY_LINK_OPERATOR_IMAGE_PULLSPEC')
+rhcl_operator_csv['metadata']['annotations']['repository'] = 'https://github.com/kuadrant/kuadrant-operator'
+rhcl_operator_csv['metadata']['annotations']['containerImage'] = os.getenv('CONNECTIVITY_LINK_OPERATOR_IMAGE_PULLSPEC')
 
 # Add description & icon
 rhcl_operator_csv['metadata']['annotations']['description'] = os.getenv('DESCRIPTION')
