@@ -1,7 +1,7 @@
 # Build the authorino binary
 # https://catalog.redhat.com/software/containers/ubi9/go-toolset
 
-FROM registry.access.redhat.com/ubi9/go-toolset:latest AS builder
+FROM registry.redhat.io/ubi9/go-toolset:latest AS builder
 USER root
 WORKDIR /usr/src/authorino
 COPY authorino/ .
@@ -16,7 +16,7 @@ RUN CGO_ENABLED=0 GO111MODULE=on go build -a -ldflags "-X main.version=${version
 # Use Red Hat minimal base image to package the binary
 # https://catalog.redhat.com/software/containers/ubi9-minimal
 
-FROM registry.access.redhat.com/ubi9-minimal:latest
+FROM registry.redhat.io/ubi9-minimal:latest
 
 # shadow-utils is required for `useradd, but is already included in the ubi9 go-toolset image, so commenting out for now`
 # RUN PKGS="shadow-utils" \
