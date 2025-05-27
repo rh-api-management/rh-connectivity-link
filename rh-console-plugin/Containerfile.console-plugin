@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi9/nodejs-22@sha256:69b2c3028e14ca3bad68872d94869af61ba4061935c34e4dd1ee74e703f55dd3 AS builder
+FROM registry.redhat.io/ubi9/nodejs-22:latest AS builder
 
 USER root
 
@@ -54,7 +54,7 @@ RUN test -f /usr/share/nginx/html/plugin-manifest.json && \
     test -d /usr/share/nginx/html/locales && \
     echo "All required files are present."
 
-FROM registry.redhat.io/ubi9/nginx-126 AS runner
+FROM registry.redhat.io/ubi9/nginx-126:latest AS runner
 
 COPY --from=builder /usr/share/nginx/html/ /usr/share/nginx/html/
 
