@@ -43,11 +43,12 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -ldflags
 
 FROM registry.redhat.io/ubi9/ubi-minimal:latest
 
-LABEL summary="Red Hat DNS Operator Container Image" \
+LABEL version="1.0.0" \
+      summary="Red Hat DNS Operator Container Image" \
       description="Red Hat DNS Operator Container Image" \
             name="dns-operator" \
             com.redhat.component="Red Hat DNS Operator" \
-            io.k8s.display-name="Red Hat NS Operator" \
+            io.k8s.display-name="Red Hat DNS Operator" \
             io.k8s.description="Red Hat DNS Operator Container Image" \
             io.openshift.expose-services="" \
             io.openshift.tags="api" \

@@ -58,7 +58,7 @@ FROM registry.redhat.io/ubi9/nginx-126 AS runner
 
 COPY --from=builder /usr/share/nginx/html/ /usr/share/nginx/html/
 
-LABEL version="0.0.18" \
+LABEL version="1.0.0" \
     com.redhat.component="rhcl-console-plugin-container" \
     name="rhcl-1/rhcl-console-plugin-rhel9" \
     summary="Red Hat Connectivity Link Console Plugin" \

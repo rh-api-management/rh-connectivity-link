@@ -31,12 +31,12 @@ LABEL operators.operatorframework.io.metrics.project_layout=go.kubebuilder.io/v3
 LABEL operators.operatorframework.io.test.mediatype.v1=scorecard+v1
 LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 
-LABEL summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+LABEL version="1.0.0" \
+    summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
     name="dns-operator-bundle" \
     description="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
     distribution-scope="public" \
     release="0.0.1" \
-    version="0.0.1" \
     url="" \
     com.redhat.component="Red Hat DNS Operator Bundle" \
     io.k8s.display-name="Red Hat Connectivity Link Operator metadata" \

@@ -49,9 +49,9 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDF
 
 FROM registry.redhat.io/ubi9/ubi-minimal:latest
 
-LABEL com.redhat.component="authorino-operator" \
+LABEL version="1.0.0" \
+      com.redhat.component="authorino-operator" \
       name="Authorino Operator" \
-      version="0.0.1" \
       release="0.0.1" \
       url="registry.redhat.io/rhcl-1/authorino-operator" \
       summary="Enables authentication and authorization for Gateways and applications in a Gateway API network." \

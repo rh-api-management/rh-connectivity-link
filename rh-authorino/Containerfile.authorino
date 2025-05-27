@@ -25,7 +25,8 @@ FROM registry.redhat.io/ubi9-minimal:latest
 #     && microdnf -y clean all
 RUN useradd -u 1000 -s /bin/sh -m -d /home/authorino authorino
 
-LABEL summary="authorino container image" \
+LABEL version="1.0.0" \
+      summary="authorino container image" \
       description="authorino container image provides an easy way to install authorino" \
       com.redhat.component="authorino" \
       name="authorino" \

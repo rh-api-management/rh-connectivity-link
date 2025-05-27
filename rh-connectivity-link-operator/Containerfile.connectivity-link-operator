@@ -40,8 +40,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "-X ma
 
 FROM registry.redhat.io/ubi9/ubi-minimal:latest
 
-LABEL summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
-      version="" \
+LABEL version="1.0.0" \
+      summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
       name="Red Hat Connectivity Link Operator Bundle" \
       description="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
       io.k8s.display-name="Red Hat Connectivity Link Operator metadata" \
