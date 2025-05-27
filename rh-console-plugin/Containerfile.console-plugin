@@ -2,8 +2,6 @@ FROM registry.redhat.io/ubi9/nodejs-22@sha256:69b2c3028e14ca3bad68872d94869af61b
 
 USER root
 
-ENV NODE_VERSION=22
-
 RUN dnf install -y nginx npm
 
 WORKDIR /src/yarn
@@ -17,7 +15,7 @@ RUN npm install --offline && \
     \
     # Show node and yarn versions
     echo "Currently running: " node --version && \
-    echo "Currently running: "yarn --version
+    echo "Currently running: " yarn --version
 
 RUN yarn config set network-concurrency 1 && \
     yarn config set network-timeout 100000
