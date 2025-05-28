@@ -1,6 +1,6 @@
 # Based on ./gatekeeper-operator/Dockerfile
 # Build the manager binary
-FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS drift-detectorist
+FROM registry.redhat.io/ubi9/go-toolset:latest AS drift-detectorist
 USER 0
 COPY drift-detection/detector.sh /detector.sh
 # Check to see if we need to react to any upstream changes
@@ -9,7 +9,7 @@ WORKDIR /tmp
 COPY ./dns-operator/Dockerfile .
 RUN /detector.sh ./Dockerfile /drift-cache/dns-operator/Dockerfile
 
-FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS builder
+FROM registry.redhat.io/ubi9/go-toolset:latest AS builder
 
 # TODO: cleanup if not needed
 #ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
@@ -41,13 +41,14 @@ COPY dns-operator/LICENSE /licenses/LICENSE
 RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -ldflags "-X main.version=${VERSION} -X main.gitSHA=${GIT_SHA} -X main.dirty=${DIRTY}" -a -o ${BINARY_NAME} cmd/main.go
 
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+FROM registry.redhat.io/ubi9/ubi-minimal:latest
 
-LABEL summary="Red Hat DNS Operator Container Image" \
+LABEL version="1.0.0" \
+      summary="Red Hat DNS Operator Container Image" \
       description="Red Hat DNS Operator Container Image" \
             name="dns-operator" \
             com.redhat.component="Red Hat DNS Operator" \
-            io.k8s.display-name="Red Hat NS Operator" \
+            io.k8s.display-name="Red Hat DNS Operator" \
             io.k8s.description="Red Hat DNS Operator Container Image" \
             io.openshift.expose-services="" \
             io.openshift.tags="api" \

@@ -58,8 +58,7 @@ limitador_operator_csv['metadata']['annotations']['features.operators.openshift.
 limitador_operator_csv['metadata']['annotations']['features.operators.openshift.io/cnf'] = 'false'
 limitador_operator_csv['metadata']['annotations']['features.operators.openshift.io/cni'] = 'false'
 limitador_operator_csv['metadata']['annotations']['features.operators.openshift.io/csi'] = 'false'
-limitador_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
-limitador_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
+limitador_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '["Red Hat Connectivity Link"]'
 
 # Add description & icon
 limitador_operator_csv['metadata']['annotations']['description'] = os.getenv('DESCRIPTION')

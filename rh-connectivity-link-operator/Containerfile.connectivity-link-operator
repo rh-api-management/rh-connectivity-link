@@ -1,6 +1,6 @@
 # Based on ./gatekeeper-operator/Dockerfile
 # Build the manager binary
-FROM registry.access.redhat.com/ubi9/go-toolset:1.23 AS drift-detectorist
+FROM registry.redhat.io/ubi9/go-toolset:latest AS drift-detectorist
 USER 0
 COPY drift-detection/detector.sh /detector.sh
 # Check to see if we need to react to any upstream changes
@@ -9,7 +9,7 @@ WORKDIR /tmp
 COPY rh-connectivity-link-operator/kuadrant-operator/Dockerfile .
 RUN /detector.sh ./Dockerfile /drift-cache/kuadrant-operator/Dockerfile
 
-FROM registry.access.redhat.com/ubi9/go-toolset:1.23 AS builder
+FROM registry.redhat.io/ubi9/go-toolset:latest AS builder
 
 # TODO: cleanup if not needed
 #ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
@@ -38,13 +38,18 @@ COPY kuadrant-operator/pkg/ pkg/
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "-X main.version=${VERSION} -X main.gitSHA=${GIT_SHA} -X main.dirty=${DIRTY}" -o ${BINARY_NAME} cmd/main.go
 
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+FROM registry.redhat.io/ubi9/ubi-minimal:latest
 
-LABEL summary="APIcast operator container image" \
-      description="APIcast Operator provides an easy way to install a 3scale APIcast self-managed solution, providing configurability options at the time of installation." \
-            io.k8s.display-name="APIcast Operator" \
-            io.openshift.expose-services="" \
-            io.openshift.tags="3scale, apicast, api, gateway, openresty, api-gateway" \
+LABEL version="1.0.0" \
+      summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+      name="Red Hat Connectivity Link Operator Bundle" \
+      description="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+      io.k8s.display-name="Red Hat Connectivity Link Operator metadata" \
+      io.k8s.description="Red Hat Connnectivity Link Operator" \
+      io.openshift.expose-services="" \
+      io.openshift.tags="api" \
+      url="redhat.com" \
+      com.redhat.component="" \
       vendor="Red Hat, Inc."
 
 ENV OPERATOR_BINARY_NAME="manager" \

@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
 
+# enables strict mode: `-e` fails if error, `-u` checks variable references, `-o pipefail`: prevents errors in a pipeline from being masked
+set -euo pipefail
+
 export CONNECTIVITY_LINK_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-connectivity-link-operator@sha256:71e63ca10b944fbfd170ccb659f3d600e7a748347ae20e4dc0f7261d03e5ede5"
 export CSV_FILE=/manifests/kuadrant-operator.clusterserviceversion.yaml
-
+export CONSOLE_PLUGIN_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-console-plugin@sha256:475de9c1dfc78760da0d2e10ffd1a4e24186f5cf08c76950521063afc398720a"
+export WASM_SHIM_PULLSPEC="oci://quay.io/kuadrant/wasm-shim:latest"
 export DESCRIPTION=$(cat DESCRIPTION)
-
 export ICON=$(cat ICON)
 
-sed -i -e "s|quay.io/kuadrant/kuadrant-operator:.*|\"${CONNECTIVITY_LINK_OPERATOR_IMAGE_PULLSPEC}\"|g" \
+sed -i -e "s|quay.io/kuadrant/kuadrant-operator:latest|\"${CONNECTIVITY_LINK_OPERATOR_IMAGE_PULLSPEC}\"|g" \
 	"${CSV_FILE}"
+sed -i -e "s|quay.io/kuadrant/console-plugin:latest|\"${CONSOLE_PLUGIN_PULLSPEC}\"|g" \
+   "${CSV_FILE}"
+sed -i -e "s|quay.io/kuadrant/kuadrant-console-plugin:latest|\"${CONSOLE_PLUGIN_PULLSPEC}\"|g" \
+   "${CSV_FILE}"
+sed -i -e "s|quay.io/kuadrant/wasm-shim:latest|\"${WASM_SHIM_PULLSPEC}\"|g" \
+   "${CSV_FILE}"
 
 export EPOC_TIMESTAMP=$(date +%s)
 # time for some direct modifications to the csv
@@ -52,8 +61,9 @@ rhcl_operator_csv['metadata']['annotations']['features.operators.openshift.io/to
 rhcl_operator_csv['metadata']['annotations']['features.operators.openshift.io/cnf'] = 'false'
 rhcl_operator_csv['metadata']['annotations']['features.operators.openshift.io/cni'] = 'false'
 rhcl_operator_csv['metadata']['annotations']['features.operators.openshift.io/csi'] = 'false'
-rhcl_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
-rhcl_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
+rhcl_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '["Red Hat Connectivity Link"]'
+rhcl_operator_csv['metadata']['annotations']['repository'] = 'https://github.com/kuadrant/kuadrant-operator'
+rhcl_operator_csv['metadata']['annotations']['containerImage'] = os.getenv('CONNECTIVITY_LINK_OPERATOR_IMAGE_PULLSPEC')
 
 # Add description & icon
 rhcl_operator_csv['metadata']['annotations']['description'] = os.getenv('DESCRIPTION')

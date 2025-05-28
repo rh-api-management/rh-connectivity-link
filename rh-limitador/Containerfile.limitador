@@ -45,7 +45,7 @@
     FROM registry.redhat.io/ubi9/ubi:latest
     # Labels consumed by Red Hat build service
     # Please keep the version label first as it is looked up by the Makefile - also, it is meant to be the image tag.
-    LABEL version="1.6.0" \
+    LABEL version="1.0.0" \
             com.redhat.component="limitador-container" \
             name="rhcl-1/limitador-rhel9" \
             summary="Limitador is a generic rate-limiter written in Rust." \
@@ -54,18 +54,25 @@
             io.k8s.description="Limitador is a generic rate-limiter written in Rust. It can be used as a library, or as a service. The service exposes HTTP endpoints to apply and observe limits. Limitador can be used with Envoy because it also exposes a grpc service, on a different port, that implements the Envoy Rate Limit protocol (v3)." \
             io.openshift.tags="rate limiting, envoy, api" \
             maintainer="asnaps@redhat.com"
+
     # shadow-utils is required for `useradd`
     RUN PKGS="libgcc shadow-utils" \
         && dnf --assumeyes install --nodocs $PKGS \
         && rpm --verify --nogroup --nouser $PKGS \
         && dnf --assumeyes clean all
+
     RUN useradd -u 1000 -s /bin/sh -m -d /home/limitador limitador
+
     WORKDIR /home/limitador/bin/
     ENV PATH="/home/limitador/bin:${PATH}"
+
     COPY --from=limitador-build /tmp/limitador/limitador-server/examples/limits.yaml ../
     COPY --from=limitador-build /tmp/limitador/target/release/limitador-server ./limitador-server
     COPY --from=limitador-build licenses/LICENSE /licenses/LICENSE
+    
     RUN chown -R limitador:root /home/limitador \
         && chmod -R 750 /home/limitador
+
     USER limitador
+
     CMD ["limitador-server"]

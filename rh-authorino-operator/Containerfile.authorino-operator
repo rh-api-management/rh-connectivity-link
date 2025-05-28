@@ -6,7 +6,7 @@
 ################################
 
 # Using 1.22 version (not 1.22.9)
-FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS drift-detectorist
+FROM registry.redhat.io/ubi9/go-toolset:latest AS drift-detectorist
 USER 0
 COPY drift-detection/detector.sh /detector.sh
 # Check to see if we need to react to any upstream changes
@@ -16,7 +16,7 @@ COPY ./authorino-operator/Dockerfile .
 RUN /detector.sh ./Dockerfile /drift-cache/authorino-operator/Dockerfile
 
 # Using 1.22 version (not 1.22.9)
-FROM registry.access.redhat.com/ubi9/go-toolset:1.22 AS builder
+FROM registry.redhat.io/ubi9/go-toolset:latest AS builder
 
 # TODO: cleanup if not needed
 #ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
@@ -47,16 +47,16 @@ COPY ./authorino-operator/LICENSE /licenses/LICENSE
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDFLAGS}$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -o ${BINARY_NAME} main.go
 
 
-FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+FROM registry.redhat.io/ubi9/ubi-minimal:latest
 
-LABEL com.redhat.component="authorino-operator" \
+LABEL version="1.0.0" \
+      com.redhat.component="authorino-operator" \
       name="Authorino Operator" \
-      version="0.0.1" \
       release="0.0.1" \
       url="registry.redhat.io/rhcl-1/authorino-operator" \
       summary="Enables authentication and authorization for Gateways and applications in a Gateway API network." \
       description="Enables authentication and authorization for Gateways and applications in a Gateway API network." \
-      io.k8s.description="" \
+      io.k8s.description="Authorino Operator" \
       io.k8s.display-name="Authorino Operator" \
       io.openshift.expose-services="" \
       io.openshift.tags="api" \

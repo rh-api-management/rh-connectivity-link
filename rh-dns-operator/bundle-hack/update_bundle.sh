@@ -52,8 +52,7 @@ dns_operator_csv['metadata']['annotations']['features.operators.openshift.io/tok
 dns_operator_csv['metadata']['annotations']['features.operators.openshift.io/cnf'] = 'false'
 dns_operator_csv['metadata']['annotations']['features.operators.openshift.io/cni'] = 'false'
 dns_operator_csv['metadata']['annotations']['features.operators.openshift.io/csi'] = 'false'
-dns_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
-dns_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '[]'
+dns_operator_csv['metadata']['annotations']['operators.openshift.io/valid-subscription'] = '["Red Hat Connectivity Link"]'
 
 # Add description & icon
 dns_operator_csv['metadata']['annotations']['description'] = os.getenv('DESCRIPTION')
