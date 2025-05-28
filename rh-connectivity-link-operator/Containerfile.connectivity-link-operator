@@ -1,5 +1,7 @@
 # Based on ./gatekeeper-operator/Dockerfile
 # Build the manager binary
+
+# Builder Stage
 FROM registry.redhat.io/ubi9/go-toolset:latest AS drift-detectorist
 USER 0
 COPY drift-detection/detector.sh /detector.sh
@@ -37,7 +39,7 @@ COPY kuadrant-operator/pkg/ pkg/
 # Build
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "-X main.version=${VERSION} -X main.gitSHA=${GIT_SHA} -X main.dirty=${DIRTY}" -o ${BINARY_NAME} cmd/main.go
 
-
+# Runner Stage
 FROM registry.redhat.io/ubi9/ubi-minimal:latest
 
 LABEL version="1.0.0" \
