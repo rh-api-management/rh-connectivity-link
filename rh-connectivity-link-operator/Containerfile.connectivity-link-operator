@@ -1,5 +1,6 @@
 # Based on ./gatekeeper-operator/Dockerfile
 # Build the manager binary
+
 FROM registry.redhat.io/ubi9/go-toolset:latest AS drift-detectorist
 USER 0
 COPY drift-detection/detector.sh /detector.sh

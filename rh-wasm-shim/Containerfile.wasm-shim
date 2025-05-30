@@ -6,7 +6,6 @@
 
     ARG GITHUB_SHA
     ENV GITHUB_SHA=${GITHUB_SHA:-unknown}
-    
     ARG RUSTC_VERSION=1.80.0
     ARG TARGET=wasm32-unknown-unknown
     RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git rust-std-static-${TARGET}" \

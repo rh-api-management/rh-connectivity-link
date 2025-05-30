@@ -13,7 +13,6 @@
     && yum -y clean all
     
     WORKDIR /tmp/limitador
-
     ARG GITHUB_SHA
     ARG CARGO_ARGS
     ENV GITHUB_SHA=${GITHUB_SHA:-unknown}
