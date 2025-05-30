@@ -1,6 +1,6 @@
 ---
 name: rhcl-ec
-description: Custom EC Policy for RHCL Konflux Migration
+description: Custom EC Policy for RHCL Konflux Migration Builds
 sources:
   - name: Default
     policy:
