@@ -22,9 +22,8 @@ sources:
     config:
       include:
         - '@redhat'
-  volatileConfig:
+      exclude: []
+    volatileConfig:
       exclude:
-        - value: rpm_repos.ids_known
-          effectiveUntil: "2025-06-12T00:00:00Z"
-        - value: cve.cve_blockers:GHSA-j777-63hf-hx76
-          effectiveUntil: "2025-06-12T00:00:00Z"
+        - rpm_repos.ids_known
+        - cve.cve_blockers:GHSA-j777-63hf-hx76
