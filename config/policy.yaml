@@ -22,6 +22,7 @@ sources:
     config:
       include:
         - '@redhat'
+  volatileConfig:
       exclude:
         - value: rpm_repos.ids_known
           effectiveUntil: "2025-06-12T00:00:00Z"
