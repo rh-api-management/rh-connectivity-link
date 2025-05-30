@@ -1,7 +1,7 @@
 [project]
-name = "rh-authorino-operator-bundle"
+name = "rh-connectivity-link"
 version = "0.1.0"
 dependencies = [
-    "ruamel.yaml==0.18.11",
-    "ruamel.yaml.clib==0.2.12"
+    "ruamel.yaml==0.17.9",
+    "ruamel.yaml.clib==0.1.2"
 ]

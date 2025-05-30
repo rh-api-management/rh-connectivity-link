@@ -5,11 +5,20 @@
         "description": "Enable automerge for konflux bot digest updates only",
         "matchUpdateTypes": ["digest"],
         "automerge": true
+        },
+        {
+          "description": "Automerge patch updates for parent image",
+          "matchUpdateTypes": ["patch"],
+          "matchPackageNames": "registry.redhat.io/ubi9/go-toolset",
+          "automerge": true
+        },
+        {
+          "description": "Block minor updates for parent image",
+          "matchUpdateTypes": ["minor"],
+          "matchPackageNames": ["registry.redhat.io/ubi9/go-toolset"],
+          "enabled": false
         }
     ],
-    "rpm": {
-        "lockFileMaintenance": { "enabled": true }
-    },
     "lockFileMaintenance": {
         "enabled": true,
         "automerge": true
