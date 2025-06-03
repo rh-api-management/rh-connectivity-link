@@ -10,7 +10,6 @@ FROM builder-runner AS builder
 COPY ./bundle-hack/ .
 COPY limitador-operator/bundle/manifests /manifests/
 COPY limitador-operator/bundle/metadata /metadata/
-
 RUN chmod +x ./update_bundle.sh && ./update_bundle.sh
 
 FROM scratch

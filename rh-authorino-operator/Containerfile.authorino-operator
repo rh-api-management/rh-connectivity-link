@@ -18,12 +18,6 @@ RUN /detector.sh ./Dockerfile /drift-cache/authorino-operator/Dockerfile
 # Using 1.22 version (not 1.22.9)
 FROM registry.redhat.io/ubi9/go-toolset:latest AS builder
 
-# TODO: cleanup if not needed
-#ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
-#             -X ${VERSION_PKG}.gitCommit=59587323ce32580b4dffba0a09b1ca22109925db \
-#             -X ${VERSION_PKG}.gitTreeState=clean \
-#             -X ${VERSION_PKG}.buildDate="
-
 ENV LDFLAGS="-X ${VERSION_PKG}.buildDate="
 ENV BINARY_NAME="manager"
 

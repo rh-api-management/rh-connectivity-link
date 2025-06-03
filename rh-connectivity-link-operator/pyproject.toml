@@ -1,7 +1,0 @@
-[project]
-name = "rh-connectivity-link-operator-bundle"
-version = "0.1.0"
-dependencies = [
-    "ruamel.yaml==0.18.11",
-    "ruamel.yaml.clib==0.2.12"
-]

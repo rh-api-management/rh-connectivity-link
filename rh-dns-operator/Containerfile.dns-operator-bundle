@@ -10,7 +10,6 @@ FROM builder-runner AS builder
 COPY ./bundle-hack/ .
 COPY dns-operator/bundle/manifests /manifests/
 COPY dns-operator/bundle/metadata /metadata/
-
 RUN chmod +x ./update_bundle.sh && ./update_bundle.sh
 
 FROM scratch

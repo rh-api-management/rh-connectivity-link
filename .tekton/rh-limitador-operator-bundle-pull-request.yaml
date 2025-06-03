@@ -34,7 +34,7 @@ spec:
   - name: prefetch-input
     value: '[{"type": "rpm", "path": "."}, {"type": "gomod",
       "path": "rh-limitador-operator/limitador-operator"}, {"type": "pip", "path":
-      "./rh-limitador-operator"}]'
+      "."}]'
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.

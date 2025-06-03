@@ -1,7 +1,6 @@
+---
 name: rhcl-ec
-description: >-
-  default ec from github.com/enterprise-contract/config/blob/main/redhat/policy.yaml with the addition of some additional rules for allowed registry prefixes
-
+description: Custom EC Policy for RHCL Konflux Migration Builds
 sources:
   - name: Default
     policy:
@@ -23,5 +22,8 @@ sources:
     config:
       include:
         - '@redhat'
+      exclude: []
+    volatileConfig:
       exclude:
-        - 'rpm_repos.ids_known'
+        - rpm_repos.ids_known
+        - cve.cve_blockers:GHSA-j777-63hf-hx76

@@ -33,7 +33,7 @@ spec:
   - name: path-context
     value: rh-authorino-operator
   - name: prefetch-input
-    value: '[{"type": "rpm", "path": "."}, {"type": "gomod", "path": "rh-authorino-operator/authorino-operator"}, {"type": "pip", "path": "./rh-authorino-operator"}]'
+    value: '[{"type": "rpm", "path": "."}, {"type": "gomod", "path": "rh-authorino-operator/authorino-operator"}, {"type": "pip", "path": "."}]'
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.
