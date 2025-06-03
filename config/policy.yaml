@@ -25,5 +25,7 @@ sources:
       exclude: []
     volatileConfig:
       exclude:
-        - rpm_repos.ids_known
-        - cve.cve_blockers:GHSA-j777-63hf-hx76
+        - value: rpm_repos.ids_known
+          effectiveUntil: "2025-08-01T00:00:00Z"
+        - value: cve.cve_blockers:GHSA-j777-63hf-hx76
+          effectiveUntil: "2025-08-01T00:00:00Z"
