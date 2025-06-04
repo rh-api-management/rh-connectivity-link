@@ -1,0 +1,29 @@
+{
+    "extends": ["github>konflux-ci/mintmaker//config/renovate/renovate.json"],
+    "packageRules": [
+        {
+        "description": "Enable automerge for konflux bot digest updates only",
+        "matchUpdateTypes": ["digest"],
+        "automerge": true,
+        "enabled": true
+        },
+        {
+          "description": "Automerge patch updates for parent image",
+          "matchUpdateTypes": ["patch"],
+          "matchPackageNames": "registry.redhat.io/ubi9/go-toolset",
+          "automerge": true,
+          "enabled": true
+        },
+        {
+          "description": "Block minor updates for parent image",
+          "matchUpdateTypes": ["minor"],
+          "matchPackageNames": ["registry.redhat.io/ubi9/go-toolset"],
+          "automerge": true,
+          "enabled": true
+        }
+    ],
+    "lockFileMaintenance": {
+        "enabled": true,
+        "automerge": true
+    }
+}

@@ -1,0 +1,74 @@
+# Based on ./gatekeeper-operator/Dockerfile
+# Build the manager binary
+
+FROM registry.redhat.io/ubi9/go-toolset:latest AS drift-detectorist
+USER 0
+COPY drift-detection/detector.sh /detector.sh
+# Check to see if we need to react to any upstream changes
+COPY drift-cache /drift-cache
+WORKDIR /tmp
+COPY rh-connectivity-link-operator/kuadrant-operator/Dockerfile .
+RUN /detector.sh ./Dockerfile /drift-cache/kuadrant-operator/Dockerfile
+
+FROM registry.redhat.io/ubi9/go-toolset:latest AS builder
+
+# TODO: cleanup if not needed
+#ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
+#             -X ${VERSION_PKG}.gitCommit=59587323ce32580b4dffba0a09b1ca22109925db \
+#             -X ${VERSION_PKG}.gitTreeState=clean \
+#             -X ${VERSION_PKG}.buildDate="
+
+ENV LDFLAGS="-X main.version=${VERSION} -X main.gitSHA=${GIT_SHA} -X main.dirty=${DIRTY}"
+ENV BINARY_NAME="manager"
+
+WORKDIR /workspace
+# Copy the Go Modules manifests
+COPY kuadrant-operator/go.mod go.mod
+COPY kuadrant-operator/go.sum go.sum
+# cache deps before building and copying source so that we don't need to re-download as much
+# and so that source changes don't invalidate our downloaded layer
+RUN go mod download
+
+# Copy the go source
+COPY kuadrant-operator/cmd/main.go cmd/main.go
+COPY kuadrant-operator/api/ api/
+COPY kuadrant-operator/internal/ internal/
+COPY kuadrant-operator/pkg/ pkg/
+
+# Build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "-X main.version=${VERSION} -X main.gitSHA=${GIT_SHA} -X main.dirty=${DIRTY}" -o ${BINARY_NAME} cmd/main.go
+
+
+FROM registry.redhat.io/ubi9/ubi-minimal:latest
+
+LABEL version="1.0.0" \
+      summary="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+      name="Red Hat Connectivity Link Operator Bundle" \
+      description="Red Hat Connectivity Link enables you to secure, protect, and connect your APIs and applications in multicluster, multicloud, and hybrid cloud environments" \
+      io.k8s.display-name="Red Hat Connectivity Link Operator metadata" \
+      io.k8s.description="Red Hat Connnectivity Link Operator" \
+      io.openshift.expose-services="" \
+      io.openshift.tags="api" \
+      url="redhat.com" \
+      com.redhat.component="" \
+      vendor="Red Hat, Inc."
+
+ENV OPERATOR_BINARY_NAME="manager" \
+  USER_UID=1001 \
+  USER_NAME=connectivity-link-operator
+
+USER root
+
+# install operator binary
+COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
+RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
+
+# # TODO: Install licenses
+# ENV LICENSES_DIR="/licenses/apicast-operator/"
+# RUN mkdir -p ${LICENSES_DIR}
+# COPY rh-connectivity-link-operator/kuadrant-operator/licenses.xml ${LICENSES_DIR}
+# RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
+
+ENTRYPOINT ["/manager"]
+
+USER ${USER_UID}

@@ -1,0 +1,51 @@
+# ------------------------------------------------------------------------------
+# Build Stage
+# ------------------------------------------------------------------------------
+
+    FROM registry.redhat.io/ubi9/ubi:latest as wasm-shim-build
+
+    ARG GITHUB_SHA
+    ENV GITHUB_SHA=${GITHUB_SHA:-unknown}
+    ARG RUSTC_VERSION=1.80.0
+    ARG TARGET=wasm32-unknown-unknown
+    RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git rust-std-static-${TARGET}" \
+    && dnf install --nodocs --assumeyes $PKGS \
+    && rpm --verify --nogroup --nouser $PKGS \
+    && yum -y clean all
+    
+    WORKDIR /usr/src/wasm-shim
+    
+    COPY ./wasm-shim/Cargo.lock ./Cargo.lock
+    COPY ./wasm-shim/Cargo.toml ./Cargo.toml
+    COPY wasm-shim/.cargo/config.toml ./.cargo/config.toml
+    
+    COPY ./wasm-shim/src src
+    COPY ./wasm-shim/build.rs build.rs
+    COPY ./wasm-shim/vendor-protobufs vendor-protobufs
+
+    COPY wasm-shim/LICENSE /licenses/LICENSE
+    
+    RUN cargo build --target=wasm32-unknown-unknown --release --offline
+    
+    # ------------------------------------------------------------------------------
+    # Run Stage
+    # ------------------------------------------------------------------------------
+    
+    FROM scratch
+    
+    LABEL version="0.9.0" \
+              com.redhat.component="wasm-shim-container" \
+              name="rhcl-1/wasm-shim-rhel9" \
+              summary="Wasm-shim is a generic rate-limiter written in Rust." \
+              description="Wasm-shim is a generic rate-limiter written in Rust. It can be used as a library, or as a service. The service exposes HTTP endpoints to apply and observe limits. Wasm-shim can be used with Envoy because it also exposes a grpc service, on a different port, that implements the Envoy Rate Limit protocol (v3)." \
+              distribution-scope="public" \
+              release="0.0.1" \
+              url="https://catalog.redhat.com/software/containers/rhcl-1/wasm-shim-rhel9/672a1e565d865456f8f2835f" \
+              vendor="Red Hat, Inc." \
+              io.k8s.display-name="Wasm-shim Rate Limiting" \
+              io.k8s.description="Wasm-shim is a generic rate-limiter written in Rust." \
+              io.openshift.tags="rate limiting, envoy, api" \
+              maintainer="eastizle@redhat.com"
+
+    COPY --from=wasm-shim-build /usr/src/wasm-shim/target/wasm32-unknown-unknown/release/wasm_shim.wasm /plugin.wasm
+    COPY --from=wasm-shim-build licenses/LICENSE /licenses/LICENSE

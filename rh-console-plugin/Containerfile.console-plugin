@@ -1,0 +1,72 @@
+FROM registry.redhat.io/ubi9/nodejs-22:latest AS builder
+
+USER root
+
+RUN dnf install -y nginx npm
+
+WORKDIR /src/yarn
+
+COPY yarn-install .
+    
+# Install yarn
+RUN npm install --offline && \
+    ln -s $PWD/node_modules/yarn/bin/yarn /usr/local/bin/yarn && \
+    \
+    # Show node and yarn versions
+    echo "Currently running: " node --version && \
+    echo "Currently running: " yarn --version
+
+RUN yarn config set network-concurrency 1 && \
+    yarn config set network-timeout 100000
+
+RUN mkdir -p /var/cache/nginx /var/log/nginx /run && \
+    chmod -R 777 /var/cache/nginx /var/log/nginx /run /usr/share/nginx/html/
+
+WORKDIR /usr/src/app
+
+# Copy over the package.json/lock file only 
+COPY kuadrant-console-plugin/package.json kuadrant-console-plugin/yarn.lock ./
+
+# Cleaning up dependencies
+RUN yarn clean
+RUN rm -rf ./node_modules
+
+# Tell yarn to fetch dependencies from /cachi2/output/deps/yarn-classic/
+RUN yarn install --offline
+
+# Copy the rest of the contents from upstream repo to container
+COPY kuadrant-console-plugin/ .
+
+# Run downstream replacements script & production build
+RUN yarn downstream-replacements
+RUN yarn build
+
+RUN pwd && ls -la
+RUN ls -la ./dist
+
+RUN cp -r ./dist/* /usr/share/nginx/html/
+
+RUN cp entrypoint.sh /usr/share/nginx/html/
+
+RUN test -f /usr/share/nginx/html/plugin-manifest.json && \
+    test -f /usr/share/nginx/html/entrypoint.sh && \
+    test -d /usr/share/nginx/html/locales && \
+    echo "All required files are present."
+
+FROM registry.redhat.io/ubi9/nginx-126:latest AS runner
+
+COPY --from=builder /usr/share/nginx/html/ /usr/share/nginx/html/
+
+LABEL version="0.1.1" \
+    com.redhat.component="rhcl-console-plugin-container" \
+    name="rhcl-1/rhcl-console-plugin-rhel9" \
+    summary="Red Hat Connectivity Link Console Plugin" \
+    description="Console Plugin for Red Hat Connectivity Link" \
+    io.k8s.display-name="Red Hat Connectivity Link Console Plugin" \
+    io.openshift.tags="api" \
+    io.k8s.description="" \
+    maintainer="jmadigan@redhat.com" 
+
+USER 1001
+
+ENTRYPOINT ["/usr/share/nginx/html/entrypoint.sh"]

@@ -1,0 +1,79 @@
+# Based on ./gatekeeper-operator/Dockerfile
+# Build the manager binary
+
+################################
+# Red Hat Authorino Operator
+################################
+
+# Using 1.22 version (not 1.22.9)
+FROM registry.redhat.io/ubi9/go-toolset:latest AS drift-detectorist
+USER 0
+COPY drift-detection/detector.sh /detector.sh
+# Check to see if we need to react to any upstream changes
+COPY drift-cache /drift-cache
+WORKDIR /tmp
+COPY ./authorino-operator/Dockerfile .
+RUN /detector.sh ./Dockerfile /drift-cache/authorino-operator/Dockerfile
+
+# Using 1.22 version (not 1.22.9)
+FROM registry.redhat.io/ubi9/go-toolset:latest AS builder
+
+ENV LDFLAGS="-X ${VERSION_PKG}.buildDate="
+ENV BINARY_NAME="manager"
+
+WORKDIR /workspace
+# Copy the Go Modules manifests
+COPY authorino-operator/go.mod go.mod
+COPY authorino-operator/go.sum go.sum
+# cache deps before building and copying source so that we don't need to re-download as much
+# and so that source changes don't invalidate our downloaded layer
+RUN go mod download
+
+# Copy the go source
+COPY ./authorino-operator/main.go main.go
+COPY ./authorino-operator/api/ api/
+COPY ./authorino-operator/controllers/ controllers/
+COPY ./authorino-operator/pkg/ pkg/
+COPY ./authorino-operator/LICENSE /licenses/LICENSE
+
+
+# Build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -a -ldflags "${LDFLAGS}$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -o ${BINARY_NAME} main.go
+
+
+FROM registry.redhat.io/ubi9/ubi-minimal:latest
+
+LABEL version="1.0.0" \
+      com.redhat.component="authorino-operator" \
+      name="Authorino Operator" \
+      release="0.0.1" \
+      url="registry.redhat.io/rhcl-1/authorino-operator" \
+      summary="Enables authentication and authorization for Gateways and applications in a Gateway API network." \
+      description="Enables authentication and authorization for Gateways and applications in a Gateway API network." \
+      io.k8s.description="Authorino Operator" \
+      io.k8s.display-name="Authorino Operator" \
+      io.openshift.expose-services="" \
+      io.openshift.tags="api" \
+      vendor="Red Hat, Inc."
+
+ENV OPERATOR_BINARY_NAME="manager" \
+  USER_UID=1001 \
+  USER_NAME=authorino-operator
+
+USER root
+
+# install operator binary
+COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
+RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
+
+COPY --from=builder licenses/LICENSE ./licenses/LICENSE
+
+# TODO: Install licenses
+# ENV LICENSES_DIR="/licenses/apicast-operator/"
+# RUN mkdir -p ${LICENSES_DIR}
+# COPY authorino-operator/LICENSE ${LICENSES_DIR}
+# RUN chown ${USER_UID} ${LICENSES_DIR}/licenses
+
+ENTRYPOINT ["/manager"]
+
+USER ${USER_UID}

@@ -1,0 +1,31 @@
+---
+name: rhcl-ec
+description: Custom EC Policy for RHCL Konflux Migration Builds
+sources:
+  - name: Default
+    policy:
+      - github.com/enterprise-contract/ec-policies//policy/lib
+      - github.com/enterprise-contract/ec-policies//policy/release
+    data:
+      - github.com/release-engineering/rhtap-ec-policy//data
+      - oci::quay.io/konflux-ci/tekton-catalog/data-acceptable-bundles:latest
+    ruleData:
+      allowed_registry_prefixes:
+        - quay.io/redhat-user-workloads/api-management-tenant/
+        - registry.access.redhat.com/
+        - registry.redhat.io/
+        - brew.registry.redhat.io/rh-osbs/openshift-golang-builder
+        - quay.io/konflux-ci/yq
+        - quay.io/konflux-ci/bazel5-ubi8
+        - quay.io/konflux-ci/bazel6-ubi9
+        - brew.registry.redhat.io/rh-osbs/rhacm2-nodejs-parent
+    config:
+      include:
+        - '@redhat'
+      exclude: []
+    volatileConfig:
+      exclude:
+        - value: rpm_repos.ids_known
+          effectiveUntil: "2025-08-01T00:00:00Z"
+        - value: cve.cve_blockers:GHSA-j777-63hf-hx76
+          effectiveUntil: "2025-08-01T00:00:00Z"

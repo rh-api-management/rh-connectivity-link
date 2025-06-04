@@ -1,0 +1,78 @@
+# Based on ./gatekeeper-operator/Dockerfile
+# Build the manager binary
+
+FROM registry.redhat.io/ubi9/go-toolset:latest AS drift-detectorist
+USER 0
+COPY drift-detection/detector.sh /detector.sh
+# Check to see if we need to react to any upstream changes
+COPY drift-cache /drift-cache
+WORKDIR /tmp
+COPY ./dns-operator/Dockerfile .
+RUN /detector.sh ./Dockerfile /drift-cache/dns-operator/Dockerfile
+
+FROM registry.redhat.io/ubi9/go-toolset:latest AS builder
+
+# TODO: cleanup if not needed
+#ENV LDFLAGS="-X ${VERSION_PKG}.gitVersion=v3.15.1-7 \
+#             -X ${VERSION_PKG}.gitCommit=59587323ce32580b4dffba0a09b1ca22109925db \
+#             -X ${VERSION_PKG}.gitTreeState=clean \
+#             -X ${VERSION_PKG}.buildDate="
+
+ENV LDFLAGS="-X ${VERSION_PKG}.buildDate="
+ENV BINARY_NAME="manager"
+
+WORKDIR /workspace
+
+# Copy the Go Modules manifests
+COPY dns-operator/go.mod go.mod
+COPY dns-operator/go.sum go.sum
+
+# cache deps before building and copying source so that we don't need to re-download as much
+# and so that source changes don't invalidate our downloaded layer
+RUN go mod download
+
+# Copy the go source
+COPY ./dns-operator/cmd/main.go cmd/main.go
+COPY ./dns-operator/api/ api/
+COPY ./dns-operator/internal/ internal/
+
+COPY dns-operator/LICENSE /licenses/LICENSE
+
+# Build
+RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -ldflags "-X main.version=${VERSION} -X main.gitSHA=${GIT_SHA} -X main.dirty=${DIRTY}" -a -o ${BINARY_NAME} cmd/main.go
+
+
+FROM registry.redhat.io/ubi9/ubi-minimal:latest
+
+LABEL version="1.0.0" \
+      summary="Red Hat DNS Operator Container Image" \
+      description="Red Hat DNS Operator Container Image" \
+            name="dns-operator" \
+            com.redhat.component="Red Hat DNS Operator" \
+            io.k8s.display-name="Red Hat DNS Operator" \
+            io.k8s.description="Red Hat DNS Operator Container Image" \
+            io.openshift.expose-services="" \
+            io.openshift.tags="api" \
+      vendor="Red Hat, Inc."
+
+ENV OPERATOR_BINARY_NAME="manager" \
+  USER_UID=1001 \
+  USER_NAME=connectivity-link-operator
+
+USER root
+
+# install operator binary
+COPY --from=builder /workspace/${OPERATOR_BINARY_NAME} /
+RUN chown ${USER_UID} /${OPERATOR_BINARY_NAME}
+
+COPY --from=builder licenses/LICENSE /licenses/LICENSE
+
+# # TODO: Install licenses
+# ENV LICENSES_DIR="/licenses/apicast-operator/"
+# RUN mkdir -p ${LICENSES_DIR}
+# COPY rh-connectivity-link-operator/dns-operator/licenses.xml ${LICENSES_DIR}
+# RUN chown ${USER_UID} ${LICENSES_DIR}/licenses.xml
+
+ENTRYPOINT ["/manager"]
+
+USER ${USER_UID}
