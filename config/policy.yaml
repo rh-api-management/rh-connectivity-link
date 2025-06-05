@@ -27,5 +27,5 @@ sources:
       exclude:
         - value: rpm_repos.ids_known
           effectiveUntil: "2025-08-01T00:00:00Z"
-        - value: cve.cve_blockers:GHSA-j777-63hf-hx76
+        - value: cve.cve_blockers
           effectiveUntil: "2025-08-01T00:00:00Z"
