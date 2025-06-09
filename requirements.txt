@@ -4,7 +4,7 @@
 #
 #    pip-compile --generate-hashes pyproject.toml
 #
-ruamel-yaml==0.17.9 \
+ruamel-yaml==0.18.14 \
     --hash=sha256:374373b4743aee9f6d9f40bea600fe020a7ac7ae36b838b4a6a93f72b584a14c \
     --hash=sha256:8873a6f5516e0d848c92418b0b006519c0566b6cd0dcee7deb9bf399e2bd204f
     # via rh-authorino-operator-bundle (pyproject.toml)
@@ -28,3 +28,6 @@ ruamel-yaml-clib==0.1.2 \
     --hash=sha256:ef8d4522d231cb9b29f6cdd0edc8faac9d9715c60dc7becbd6eb82c915a98e5b \
     --hash=sha256:f504d45230cc9abf2810623b924ae048b224a90adb01f97db4e766cfdda8e6eb
     # via rh-authorino-operator-bundle (pyproject.toml)
+ruamel.yaml==0.18.14 \
+    --hash=sha256:710ff198bb53da66718c7db27eec4fbcc9aa6ca7204e4c1df2f282b6fe5eb6b2 \
+    --hash=sha256:7227b76aaec364df15936730efbf7d72b30c0b79b1d578bbb8e3dcb2d81f52b7
