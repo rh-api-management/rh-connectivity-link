@@ -29,3 +29,5 @@ sources:
           effectiveUntil: "2025-08-01T00:00:00Z"
         - value: cve.cve_blockers
           effectiveUntil: "2025-08-01T00:00:00Z"
+        - value: test.no_erred_tests:ecosystem-cert-preflight-checks
+          effectiveUntil: "2025-08-01T00:00:00Z"
