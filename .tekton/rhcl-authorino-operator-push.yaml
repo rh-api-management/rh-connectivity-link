@@ -28,6 +28,8 @@ spec:
     value: Containerfile.authorino-operator
   - name: path-context
     value: rh-authorino-operator
+  - name: prefetch-input
+    value: '[{"type": "rpm", "path": "."}, {"type": "gomod", "path": "rh-authorino-operator/authorino-operator"}, {"type": "pip", "path": "."}]'
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.
@@ -77,7 +79,7 @@ spec:
       description: Skip checks against built image
       name: skip-checks
       type: string
-    - default: "false"
+    - default: "true"
       description: Execute the build with network isolation
       name: hermetic
       type: string
@@ -89,7 +91,7 @@ spec:
       description: Image tag expiration time, time values could be something like
         1h, 2d, 3w for hours, days, and weeks, respectively.
       name: image-expires-after
-    - default: "false"
+    - default: "true"
       description: Build a source image.
       name: build-source-image
       type: string
@@ -172,6 +174,8 @@ spec:
         workspace: git-auth
     - name: prefetch-dependencies
       params:
+      - name: dev-package-managers 
+        value: "true"
       - name: input
         value: $(params.prefetch-input)
       - name: SOURCE_ARTIFACT
