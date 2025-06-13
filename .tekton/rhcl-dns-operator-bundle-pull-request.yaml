@@ -28,6 +28,12 @@ spec:
               memory: 10Gi
             limits:
               memory: 10Gi
+    - pipelineTaskName: prefetch-dependencies
+      computeResources:
+        requests:
+          memory: 10Gi
+        limits:
+          memory: 10Gi
   params:
   - name: git-url
     value: '{{source_url}}'
