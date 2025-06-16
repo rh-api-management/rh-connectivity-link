@@ -44,6 +44,7 @@ LABEL version="1.2.2" \
       io.openshift.tags="api" \
       vendor="Red Hat, Inc."
 
+
 # Copy files to locations specified by labels.
 COPY --from=builder /manifests /manifests/
 COPY --from=builder /metadata /metadata/

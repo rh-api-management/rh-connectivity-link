@@ -68,5 +68,4 @@ LABEL version="0.1.1" \
     maintainer="jmadigan@redhat.com" 
 
 USER 1001
-
 ENTRYPOINT ["/usr/share/nginx/html/entrypoint.sh"]

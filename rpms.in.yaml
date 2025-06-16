@@ -2,6 +2,8 @@ contentOrigin:
   repofiles:
     - ./ubi.repo
     - ./redhat.repo
+context:
+  containerFile: ./rh-connectivity-link-operator/Containerfile.connectivity-link-operator-bundle
 packages:
   - cargo
   - jq
@@ -25,5 +27,3 @@ packages:
   - git
   - shadow-utils
   - libgcc
-arches:
-  - x86_64
