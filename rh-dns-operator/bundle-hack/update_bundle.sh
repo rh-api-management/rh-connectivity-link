@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export DNS_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-dns-operator@sha256:c752e37deccac5bc90b60418af4040bc852afcb078592edd96eb37de389a827c"
+export DNS_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rhcl-dns-operator@sha256:136462fc03ceafe6408084f271f57404b75d5d0f8df03780e1e17f6781c94b0b"
 export CSV_FILE=/manifests/dns-operator.clusterserviceversion.yaml
 
 export DESCRIPTION=$(cat DESCRIPTION)

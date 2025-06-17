@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-export LIMITADOR_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-limitador-operator@sha256:49cf786e6b5265b5edf34328496dc3fced9af4cdcc5d3fd94d949390a10ef1a1"
+export LIMITADOR_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rhcl-limitador-operator@sha256:fb3b5f5267dfec9056423f5f338fdec238081ccd5ecc2da079430cfbe760dce9"
 
-export LIMITADOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-limitador@sha256:f979746e7ec0914488dac5ce96eb2e66453626748af4f10a937f1cbf28eb3244"
+export LIMITADOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rhcl-limitador@sha256:59d9bde9c7da62665262b3f350019ab02c359d2e3db64df4a6159c7919cb3af0"
 
 export CSV_FILE=/manifests/limitador-operator.clusterserviceversion.yaml
 
