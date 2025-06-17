@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-export AUTHORINO_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-authorino-operator@sha256:06ed578c05176306925c4d7f41962a8540c40e51ba2a4f66c311a594e58c455e"
-export AUTHORINO_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-authorino@sha256:8b74e8630abc9aa04bceea92de8c8c62fe638871b34ba02a6fec7cbdf33f7825"
+export AUTHORINO_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rhcl-authorino-operator@sha256:4bb0d6ad96dd6d5cee0e1a059f26e9643fd5d262885cdd257c837754182eec41"
+export AUTHORINO_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rhcl-authorino@sha256:a3695bb74e2f994c6d775f7add844f7e12f037f1cdb1adddbe9c1d972d7be2cc"
 
 export CSV_FILE=/manifests/authorino-operator.clusterserviceversion.yaml
 

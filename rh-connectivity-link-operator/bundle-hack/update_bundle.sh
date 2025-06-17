@@ -3,10 +3,10 @@
 # enables strict mode: `-e` fails if error, `-u` checks variable references, `-o pipefail`: prevents errors in a pipeline from being masked
 set -euo pipefail
 
-export CONNECTIVITY_LINK_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-connectivity-link-operator@sha256:71e63ca10b944fbfd170ccb659f3d600e7a748347ae20e4dc0f7261d03e5ede5"
+export CONNECTIVITY_LINK_OPERATOR_IMAGE_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rhcl-operator@sha256:de9542279effd6bb61c3dce48551e2768fff2b7e8bc9f6e39ee2c30e4505b147"
 export CSV_FILE=/manifests/kuadrant-operator.clusterserviceversion.yaml
-export CONSOLE_PLUGIN_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rh-console-plugin@sha256:475de9c1dfc78760da0d2e10ffd1a4e24186f5cf08c76950521063afc398720a"
-export WASM_SHIM_PULLSPEC="oci://quay.io/kuadrant/wasm-shim:latest"
+export CONSOLE_PLUGIN_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rhcl-console-plugin@sha256:ea9aca3202bb20816d2cb76abebaaba5488d9bc42b25721b2194f4762efc3577"
+export WASM_SHIM_PULLSPEC="quay.io/redhat-user-workloads/api-management-tenant/rhcl-wasm-shim@sha256:5b6002f6dd72ac0d9dec45d080b442effad8cb35759418baeff10d654357567a"
 export DESCRIPTION=$(cat DESCRIPTION)
 export ICON=$(cat ICON)
 
