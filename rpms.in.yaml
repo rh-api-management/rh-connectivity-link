@@ -3,7 +3,7 @@ contentOrigin:
     - ./ubi.repo
     - ./redhat.repo
 context:
-  containerFile: ./rh-connectivity-link-operator/Containerfile.connectivity-link-operator-bundle
+  image: registry.redhat.io/ubi9/ubi:latest
 packages:
   - cargo
   - jq
