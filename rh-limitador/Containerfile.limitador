@@ -5,7 +5,7 @@
     # Use bullseye as build image instead of Bookworm as ubi9 does not not have GLIBCXX_3.4.30
     # https://access.redhat.com/solutions/6969351
 
-    FROM registry.redhat.io/ubi9/ubi:latest AS limitador-build
+    FROM registry.redhat.io/ubi9/ubi@sha256:861e833044a903f689ecfa404424494a7e387ab39cf7949c54843285d13a9774 AS limitador-build
 
     RUN PKGS="rust-toolset llvm-toolset gcc-c++ gcc-toolset-12-binutils-gold protobuf-devel protobuf-compiler openssl-devel perl git"  \
     && dnf install --nodocs --assumeyes $PKGS \
@@ -40,7 +40,7 @@
     # Run Stage
     # ------------------------------------------------------------------------------
     
-    FROM registry.redhat.io/ubi9/ubi:latest
+    FROM registry.redhat.io/ubi9/ubi@sha256:861e833044a903f689ecfa404424494a7e387ab39cf7949c54843285d13a9774
     # Labels consumed by Red Hat build service
     # Please keep the version label first as it is looked up by the Makefile - also, it is meant to be the image tag.
     LABEL version="1.0.0" \
