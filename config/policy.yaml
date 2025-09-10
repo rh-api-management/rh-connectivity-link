@@ -13,6 +13,14 @@ sources:
       allowed_registry_prefixes:
         - quay.io/redhat-user-workloads/api-management-tenant/
         - registry.access.redhat.com/
+        - registry.stage.redhat.io/rhcl-1/rhcl-console-plugin-rhel9
+        - registry.stage.redhat.io/rhcl-1/wasm-shim-rhel9
+        - registry.stage.redhat.io/rhcl-1/rhcl-rhel9-operator
+        - registry.stage.redhat.io/rhcl-1/limitador-rhel9
+        - registry.stage.redhat.io/rhcl-1/limitador-rhel9-operator
+        - registry.stage.redhat.io/rhcl-1/authorino-rhel9
+        - registry.stage.redhat.io/rhcl-1/authorino-rhel9-operator
+        - registry.stage.redhat.io/rhcl-1/dns-rhel9-operator
         - registry.redhat.io/
         - brew.registry.redhat.io/rh-osbs/openshift-golang-builder
         - quay.io/konflux-ci/yq
