@@ -1,39 +1,81 @@
 ---
-name: rhcl-ec
-description: Custom EC Policy for RHCL Konflux Migration Builds
-sources:
-  - name: Default
-    policy:
-      - github.com/enterprise-contract/ec-policies//policy/lib
-      - github.com/enterprise-contract/ec-policies//policy/release
-    data:
-      - github.com/release-engineering/rhtap-ec-policy//data
-      - oci::quay.io/konflux-ci/tekton-catalog/data-acceptable-bundles:latest
-    ruleData:
-      allowed_registry_prefixes:
-        - quay.io/redhat-user-workloads/api-management-tenant/
-        - registry.access.redhat.com/
-        - registry.stage.redhat.io/rhcl-1/rhcl-console-plugin-rhel9
-        - registry.stage.redhat.io/rhcl-1/wasm-shim-rhel9
-        - registry.stage.redhat.io/rhcl-1/rhcl-rhel9-operator
-        - registry.stage.redhat.io/rhcl-1/limitador-rhel9
-        - registry.stage.redhat.io/rhcl-1/limitador-rhel9-operator
-        - registry.stage.redhat.io/rhcl-1/authorino-rhel9
-        - registry.stage.redhat.io/rhcl-1/authorino-rhel9-operator
-        - registry.stage.redhat.io/rhcl-1/dns-rhel9-operator
-        - registry.redhat.io/
-        - brew.registry.redhat.io/rh-osbs/openshift-golang-builder
-        - quay.io/konflux-ci/yq
-        - quay.io/konflux-ci/bazel5-ubi8
-        - quay.io/konflux-ci/bazel6-ubi9
-        - brew.registry.redhat.io/rh-osbs/rhacm2-nodejs-parent
-    config:
-      include:
-        - '@redhat'
-      exclude: []
-    volatileConfig:
-      exclude:
-        - value: rpm_repos.ids_known
-          effectiveUntil: "2025-08-01T00:00:00Z"
-        - value: cve.cve_blockers
-          effectiveUntil: "2025-08-01T00:00:00Z"
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: EnterpriseContractPolicy
+metadata:
+  name: registry-api-management-stage
+  namespace: rhtap-releng-tenant
+  annotations:
+    konflux-release-data/derived-from: registry-standard
+spec:
+  description: Rules for shipping content to registry.redhat.io
+  publicKey: k8s://openshift-pipelines/public-key
+  sources:
+    - name: Release Policies
+      ruleData:
+        allowed_olm_image_registry_prefixes::
+          - quay.io/redhat-user-workloads/api-management-tenant/
+          - registry.access.redhat.com/
+          - registry.stage.redhat.io/rhcl-1/rhcl-console-plugin-rhel9
+          - registry.stage.redhat.io/rhcl-1/wasm-shim-rhel9
+          - registry.stage.redhat.io/rhcl-1/rhcl-rhel9-operator
+          - registry.stage.redhat.io/rhcl-1/rhcl-operator-bundle
+          - registry.stage.redhat.io/rhcl-1/limitador-rhel9
+          - registry.stage.redhat.io/rhcl-1/limitador-rhel9-operator
+          - registry.stage.redhat.io/rhcl-1/limitador-operator-bundle
+          - registry.stage.redhat.io/rhcl-1/authorino-rhel9
+          - registry.stage.redhat.io/rhcl-1/authorino-rhel9-operator
+          - registry.stage.redhat.io/rhcl-1/authorino-operator-bundle
+          - registry.stage.redhat.io/rhcl-1/dns-rhel9-operator
+          - registry.stage.redhat.io/rhcl-1/dns-operator-bundle
+          - registry.redhat.io/
+          - brew.registry.redhat.io/rh-osbs/openshift-golang-builder
+          - quay.io/konflux-ci/yq
+          - quay.io/konflux-ci/bazel5-ubi8
+          - quay.io/konflux-ci/bazel6-ubi9
+          - brew.registry.redhat.io/rh-osbs/rhacm2-nodejs-parent
+          - quay.io/konflux-ci/yq
+          - registry.redhat.io/
+          - registry.access.redhat.com
+          - brew.registry.redhat.io/rh-osbs/openshift-ose-operator-registry-rhel9
+          - brew.registry.redhat.io/rh-osbs/openshift-golang-builder
+        allowed_registry_prefixes:
+          - quay.io/redhat-user-workloads/api-management-tenant/
+          - registry.stage.redhat.io/rhcl-1/rhcl-console-plugin-rhel9
+          - registry.stage.redhat.io/rhcl-1/wasm-shim-rhel9
+          - registry.stage.redhat.io/rhcl-1/rhcl-rhel9-operator
+          - registry.stage.redhat.io/rhcl-1/rhcl-operator-bundle
+          - registry.stage.redhat.io/rhcl-1/limitador-rhel9
+          - registry.stage.redhat.io/rhcl-1/limitador-rhel9-operator
+          - registry.stage.redhat.io/rhcl-1/limitador-operator-bundle
+          - registry.stage.redhat.io/rhcl-1/authorino-rhel9
+          - registry.stage.redhat.io/rhcl-1/authorino-rhel9-operator
+          - registry.stage.redhat.io/rhcl-1/authorino-operator-bundle
+          - registry.stage.redhat.io/rhcl-1/dns-rhel9-operator
+          - registry.stage.redhat.io/rhcl-1/dns-operator-bundle
+          - quay.io/konflux-ci/yq
+          - registry.redhat.io/
+          - registry.access.redhat.com
+          - brew.registry.redhat.io/rh-osbs/openshift-ose-operator-registry-rhel9
+          - brew.registry.redhat.io/rh-osbs/openshift-golang-builder
+      data:
+        - github.com/release-engineering/rhtap-ec-policy//data
+        - oci::quay.io/konflux-ci/tekton-catalog/data-acceptable-bundles:latest
+        # Tasks from https://github.com/konflux-ci/tekton-tools/tree/main/tasks
+        - oci::quay.io/konflux-ci/konflux-vanguard/data-acceptable-bundles:latest
+        # Tasks from https://github.com/konflux-ci/konflux-test-tasks/tree/main/task
+        - oci::quay.io/konflux-ci/integration-service-catalog/data-acceptable-bundles:latest
+      policy:
+        - oci::quay.io/enterprise-contract/ec-release-policy:konflux
+      config:
+        exclude:
+          # Even though we have added our component image's stage repositories to the allowed list above, we are still seeing failures in the release pipelines due to the images not being from allowed registries, this is blocking the release, so I'm disabling this check for stage.
+          - olm.allowed_registries
+          - schedule.weekday_restriction
+          # https://issues.redhat.com/browse/KONFLUX-7113
+          - cve.cve_blockers
+          # We set our bundle related images via a script, mutating them to match registry.stage.redhat.io, or registry.redhat.io pre-release, excluding this check allows us to release the bundles at the same time as the operator and operand images
+          - olm.unmapped_references
+          # As mentioned in logs, currently this is rule enforced only for SBOM components created by cachi2
+          - rpm_repos.ids_known
+        include:
+          - "@redhat"
